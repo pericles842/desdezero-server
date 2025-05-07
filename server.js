@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const path = require('path');
 const app = express();
+const serverless = require('serverless-http');
 
 // Configuración de CORS para permitir peticiones desde otros orígenes
 app.use(cors({
@@ -38,4 +39,4 @@ for (const routePath in routes) {
 
 //servidor
 // Exportar como función para Vercel
-module.exports = app;
+module.exports.handler = serverless(app);
