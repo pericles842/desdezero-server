@@ -1,6 +1,8 @@
 const ProductsModel = require('../models/productModel');
 const { body, validationResult } = require('express-validator');
 
+
+
 const ProductController = {
     
     listProducts: async (req, res) => {

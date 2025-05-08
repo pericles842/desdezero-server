@@ -7,4 +7,6 @@
 
 ## npm run dev /  correr servidor
 
+## railway up
+
 

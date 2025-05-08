@@ -1,0 +1,12 @@
+[2025-05-08] ReferenceError: rifa is not defined
+    at activeRaffleProcess (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\RaffleController.js:61:22)
+    at Layer.handleRequest (C:\Users\Windows10\Desktop\dedezero-server\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Windows10\Desktop\dedezero-server\node_modules\router\lib\route.js:157:13)
+    at middleware (C:\Users\Windows10\Desktop\dedezero-server\node_modules\express-validator\lib\middlewares\check.js:16:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-05-08] ReferenceError: rifa is not defined
+    at activeRaffleProcess (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\RaffleController.js:61:22)
+    at Layer.handleRequest (C:\Users\Windows10\Desktop\dedezero-server\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Windows10\Desktop\dedezero-server\node_modules\router\lib\route.js:157:13)
+    at middleware (C:\Users\Windows10\Desktop\dedezero-server\node_modules\express-validator\lib\middlewares\check.js:16:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

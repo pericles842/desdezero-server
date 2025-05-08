@@ -2,6 +2,8 @@ const { poolPromise } = require('../config/db');
 
 class RaffleModel {
 
+    //!SE TIENE QUE RETONAR LA IMAGEN EN LA RESPUESTA DE CREAR Y LISTAR
+    //!TERMINAR EL PROCEDIMIENTO D EACTIVAR RIFA
     static async createRaffle(rifa) {
         try {
             const db = await poolPromise; // Esperamos la conexión
@@ -82,6 +84,30 @@ class RaffleModel {
 
         } catch (error) {
             console.error('Error al eliminar rifa', error);
+            throw error;
+        }
+    }
+
+    /**
+     *Activa una rifa 
+     *
+     * @static
+     * @param {*} id_raffle id de la rifa a activar
+     * @return {*}  rifa activada
+     * @memberof RaffleModel
+     */
+    static async activeRaffleProcess(id_raffle) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`UPDATE rifas SET status = 'no_activa';`);
+            await db.execute(`UPDATE rifas SET status = 'activa' WHERE id = ?`, [id_raffle]);
+
+            const [[rifas]] = await db.execute('SELECT * FROM rifas WHERE id = ?', [id_raffle])
+
+            return rifas
+
+        } catch (error) {
+            console.error('Error con el proceso de activación', error);
             throw error;
         }
     }

@@ -1,7 +1,6 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-
 const path = require('path');
 const app = express();
 
@@ -12,8 +11,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], // permite el token en header
 }));
 
-
-
 // Configuración de vistas con EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
@@ -22,19 +19,19 @@ app.set('views', path.join(__dirname, 'src', 'views'));
 // Middleware para parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-
+app.use('/uploads',  express.static(path.join(__dirname, 'src', 'utils', 'uploads')));
 
 app.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
 })
 
-const routes = require('./src/routes/routes');
 
+const routes = require('./src/routes/routes');
 // Importa rutas
 for (const routePath in routes) {
     app.use(routePath, routes[routePath]);
 }
+
 
 //servidor
 const PORT = process.env.SERVER_PORT || 3000;

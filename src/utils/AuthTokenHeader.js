@@ -15,9 +15,11 @@ require('dotenv').config();
 const authenticateToken = (req, res, next) => {
 
   
+
   // Obtener el token del encabezado de la solicitud (Authorization)
   const token = req.headers.authorization
 
+  
   if (!token) {
     return res.status(401).json({ message: 'Usuario no esta autenticado' });
   }
