@@ -2,12 +2,10 @@ const { poolPromise } = require('../config/db');
 
 class RaffleModel {
 
-    //!SE TIENE QUE RETONAR LA IMAGEN EN LA RESPUESTA DE CREAR Y LISTAR
-    //!TERMINAR EL PROCEDIMIENTO D EACTIVAR RIFA
     static async createRaffle(rifa) {
         try {
             const db = await poolPromise; // Esperamos la conexión
-
+            rifa.status = 'no_activa'
             let creado_en = new Date()
             const [{ insertId }] = await db.execute(`INSERT INTO rifas 
                                         (nombre, descripcion, url_img, fecha_fin,
@@ -88,6 +86,7 @@ class RaffleModel {
         }
     }
 
+
     /**
      *Activa una rifa 
      *
@@ -111,6 +110,34 @@ class RaffleModel {
             throw error;
         }
     }
+
+    static async getRaffleById(id) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            const [[rifa]] = await db.execute(`SELECT * FROM rifas WHERE id = ?`, [id])
+            return rifa
+
+        } catch (error) {
+            console.error('Error al obtener rifa por id', error);
+            throw error;
+        }
+    }
+
+    static async getRaffleActive() {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            const [[rifas]] = await db.execute(`SELECT * FROM rifas where status = 'activa'`)
+            if (!rifas) return { message: 'No hay rifas activas', rifa_active: false }
+            return rifas
+
+
+        } catch (error) {
+            console.error('Error con el proceso de rifa activa', error);
+            throw error;
+        }
+    }
+
+
 }
 
 module.exports = RaffleModel;

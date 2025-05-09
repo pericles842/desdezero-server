@@ -7,11 +7,14 @@ const router = express.Router();
 const RaffleController = require('../controllers/RaffleController');
 const AuthTokenHeader = require('../utils/AuthTokenHeader');
 
-//*Definir la ruta para buscar un producto
+//*Definir la rutas
 router.post('/create', AuthTokenHeader, upload.single('image'), RaffleController.createRaffle);
 router.get('/list', AuthTokenHeader, RaffleController.listRaffle);
-router.get('/activate/:id', AuthTokenHeader, [
-    param('id').exists().withMessage('El id es obligatorio')
-], RaffleController.activeRaffleProcess);
+//activa una rifa
+router.get('/activate/:id', AuthTokenHeader, [param('id').exists().withMessage('El id es obligatorio')],
+    RaffleController.activeRaffleProcess);
+//trae la rifa activa
+router.get('/active', RaffleController.getRaffleActive)
+router.delete('/delete/:id',AuthTokenHeader,RaffleController.deleteRaffle)
 
 module.exports = router;

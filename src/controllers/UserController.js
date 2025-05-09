@@ -21,6 +21,7 @@ const RaffleController = {
                 token: user.token
             });
         } catch (error) {
+            logError(error.message)
             res.status(500).send(error.message);
         }
     }

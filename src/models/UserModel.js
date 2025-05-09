@@ -16,7 +16,7 @@ class UserModel {
 
         } catch (error) {
             if (error instanceof Error) {
-                console.error(error.message);
+                error.message
             }
             throw error;
         }

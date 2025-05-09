@@ -40,7 +40,7 @@ async function saveImageToFolder(file, folder) {
             resolve({
                 filename: fileName,
                 fullPath,
-                relativePath: `src/utils/uploads/${folder}/${fileName}`
+                relativePath: `/uploads/${folder}/${fileName}`
             });
         });
     });
@@ -51,15 +51,21 @@ async function saveImageToFolder(file, folder) {
  * @param {string} relativePath
  */
 async function deleteImageFromFolder(relativePath) {
-    const fullPath = path.join(__dirname, '..', relativePath);
-    try {
-        await fs.promises.unlink(fullPath);
-        return true;
-    } catch (err) {
-        // si no existe, puedes ignorar o relanzar
-        if (err.code === 'ENOENT') return false;
-        throw err;
+  const cleanRel = relativePath.replace(/^[/\\]+/, '');
+
+  const fullPath = path.join(__dirname, relativePath);
+
+  try {
+    await fs.promises.unlink(fullPath);
+    return true;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+        
+      console.warn('No existe el fichero:', fullPath);
+      return false;
     }
+    throw err;
+  }
 }
 
 /**
