@@ -2,6 +2,7 @@ const PayModel = require('../models/PayModel');
 const { validationResult } = require('express-validator');
 const { saveImageToFolder, deleteImageFromFolder } = require('../utils/Upload');
 const logError = require('../utils/LogsCapture');
+const puppeteer = require('puppeteer');
 
 require('dotenv').config();
 
@@ -51,9 +52,9 @@ const PayController = {
         try {
             const { id } = req.params;
             let pay = await PayModel.getPayMethodById(id)
-            
+
             await deleteImageFromFolder(pay.url_img)
-            
+
             await PayModel.deletePayMethod(id);
 
             res.send(1);
@@ -62,8 +63,37 @@ const PayController = {
             res.status(500).send('Error al eliminar el método de pago');
         }
     },
+    getDollarRates: async (req, res) => {
+        try {
+            browser = await puppeteer.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
 
+            const page = await browser.newPage();
+            await page.goto('https://monitordolarvenezuela.com/', {
+                waitUntil: 'networkidle2',
+                timeout: 20000
+            });
 
+            const datos = await page.$$eval(
+                '.grid.grid-cols-6.gap-2.my-2 > div:not(:first-child) > div.border-2.rounded-lg.shadow.p-2.text-center.relative.mt-3.lg\\:mt-0',
+                cards => cards.map((card, id) => ({
+                    id,
+                    title: card.querySelector('h3')?.innerText.trim() || null,
+                    imgUrl: card.querySelector('img')?.src || null,
+                    price: card.querySelector('p.font-bold.text-xl')?.innerText
+                        .split(' ').slice(-1)[0].trim() || null
+                }))
+            );
+
+            res.send(datos);
+        } catch (err) {
+            logError(err.message);
+            return res.status(500).json({ error: 'Error al obtener las tasas del dólar' });
+        }
+
+    }
 };
 
 module.exports = PayController;
