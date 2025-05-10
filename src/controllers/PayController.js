@@ -39,7 +39,12 @@ const PayController = {
         try {
 
             let methods = await PayModel.getAllPayMethods();
-            methods.forEach(m => m.datos = JSON.parse(m.datos))
+            methods.forEach(m => {
+                try {
+                    m.datos = JSON.parse(m.datos)
+                } catch (error) { }
+            })
+
 
             res.send(methods);
 
@@ -64,13 +69,23 @@ const PayController = {
         }
     },
     getDollarRates: async (req, res) => {
+        let browser;
         try {
             browser = await puppeteer.launch({
-                headless: true,
+                headless: 'new',
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
 
             const page = await browser.newPage();
+
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            await page.setViewport({ width: 1280, height: 800 });
+
+            // Trucos anti-bot
+            await page.evaluateOnNewDocument(() => {
+                Object.defineProperty(navigator, 'webdriver', { get: () => false });
+            });
+
             await page.goto('https://monitordolarvenezuela.com/', {
                 waitUntil: 'networkidle2',
                 timeout: 20000
@@ -89,8 +104,16 @@ const PayController = {
 
             res.send(datos);
         } catch (err) {
-            logError(err.message);
-            return res.status(500).json({ error: 'Error al obtener las tasas del dólar' });
+            logError(err);
+            return res.status(500).json({ error: error });
+        } finally {
+            if (browser) {
+                try {
+                    await browser.close();
+                } catch (closeErr) {
+                    console.error('⚠️ Error al cerrar el navegador:', closeErr.message);
+                }
+            }
         }
 
     }
