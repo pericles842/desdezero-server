@@ -7,7 +7,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const UPLOADS_BASE = path.join(__dirname, 'uploads');
 
 // ✅ Carpetas permitidas
-const allowedFolders = ['img_rifas', 'img_pagos', 'media'];
+const allowedFolders = ['img_rifas', 'img_pagos', 'media','img_pay'];
 
 /**
  * Guarda una imagen en una carpeta específica del servidor.
