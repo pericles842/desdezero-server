@@ -19,7 +19,7 @@ const RaffleController = {
 
             if (req.file) {
 
-                //!si se esta editando borrar la imagen anterior
+                 //!si la imagen se repite no agregar otra
 
                 if (rifa.url_img.trim()) await deleteImageFromFolder(rifa.url_img)
                 //si la imagen existe guardamos el archivo
@@ -43,7 +43,7 @@ const RaffleController = {
         try {
 
             const rifa = await RaffleModel.listRaffle()
-
+            
             res.send(rifa);
         } catch (error) {
             logError(error)

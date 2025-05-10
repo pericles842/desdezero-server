@@ -13,7 +13,7 @@ const PayController = {
             let pay = JSON.parse(req.body.pay);
             if (req.file) {
 
-                //!si se esta editando borrar la imagen anterior
+                //!si la imagen se repite no agregar otra
                 if (pay.url_img.trim()) await deleteImageFromFolder(pay.url_img)
                 //si la imagen existe guardamos el archivo
                 const result = await saveImageToFolder(req.file, 'img_pay');
