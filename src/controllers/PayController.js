@@ -71,6 +71,7 @@ const PayController = {
     getDollarRates: async (req, res) => {
         let browser;
         try {
+            
             browser = await puppeteer.launch({
                 headless: 'new',
                 args: ['--no-sandbox', '--disable-setuid-sandbox']

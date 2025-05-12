@@ -6,7 +6,7 @@ module.exports = {
       {
         nombre: 'Andres Belandria',
         correo: 'desdezerolg@gmail.com',
-        telefono: '5551234567',
+        telefono: '584129844334',
         password: 'admin',
         creado_en: new Date('2025-05-06T11:21:04')
       }

@@ -9,19 +9,25 @@ const config = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     port: parseInt(process.env.DB_PORT),
+    waitForConnections: true, // Espera si no hay conexión disponible
+    connectionLimit: 15,      // Hasta 15  conexiones simultáneas
+    queueLimit: 100          // Cola infinita de espera
     // Opciones adicionales si fueran necesarias
     // ssl: { rejectUnauthorized: true } 
 };
 
 // Crear conexión con MySQL
-const poolPromise = sql.createConnection(config)
+const poolPromise = sql.createPool(config);
+
+// Verifica la conexión al iniciar (una sola vez)
+poolPromise.getConnection()
     .then(conn => {
         console.log('🟢 Conectado a MySQL');
-        return conn;
+        conn.release(); // libera la conexión
     })
     .catch(err => {
         console.error('🔴 Error de conexión a MySQL:', err.message);
-        process.exit(1); // Salir si falla la conexión
+        process.exit(1);
     });
 
 const sequelize = new Sequelize({

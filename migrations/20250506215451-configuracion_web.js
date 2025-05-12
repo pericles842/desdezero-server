@@ -3,23 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
-
-
-  },
-
-  async down(queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    // Crear tabla 'config'
     await queryInterface.createTable('config', {
       id: {
         type: Sequelize.INTEGER,
@@ -27,11 +11,15 @@ module.exports = {
         autoIncrement: true
       },
       tasa_banco: {
-        type: Sequelize.JSON,
+        type: Sequelize.ENUM('bcv', 'promedio', 'paralelo'),
+        allowNull: false
+      },
+      tasa_personalizada: {
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       telefono: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(20),
         allowNull: false
       },
       correo: {
@@ -41,7 +29,17 @@ module.exports = {
       estadisticas: {
         type: Sequelize.BOOLEAN,
         allowNull: false
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
+  },
+
+  async down(queryInterface, Sequelize) {
+    // Revertir: eliminar tabla 'config'
+    await queryInterface.dropTable('config');
   }
 };

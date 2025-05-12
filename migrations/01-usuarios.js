@@ -14,12 +14,12 @@ module.exports = {
       },
       correo: {
         type: Sequelize.STRING(255),
-        unique: true,
+        unique: false,
         allowNull: false
       },
       telefono: {
         type: Sequelize.STRING(255),
-        unique: true,
+        unique: false,
         allowNull: false
       },
       password: {
