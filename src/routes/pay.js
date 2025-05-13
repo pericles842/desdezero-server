@@ -13,7 +13,9 @@ router.get('/list', PayController.getAllPayMethods);
 router.delete('/delete/:id', AuthTokenHeader, PayController.deletePayMethod);
 
 router.get('/get-rates', PayController.getDollarRates);
- 
+router.post('/create-pay', upload.single('image'), PayController.createUserPayment);
+router.get('/sales', AuthTokenHeader, PayController.getSales)
+
 
 
 module.exports = router;

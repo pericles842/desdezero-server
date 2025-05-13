@@ -14,17 +14,15 @@ module.exports = {
       },
       correo: {
         type: Sequelize.STRING(255),
-        unique: false,
         allowNull: false
       },
       telefono: {
         type: Sequelize.STRING(255),
-        unique: false,
+        unique: true,
         allowNull: false
       },
       password: {
         type: Sequelize.STRING(255),
-        unique: false,
         allowNull: true
       },
       creado_en: {

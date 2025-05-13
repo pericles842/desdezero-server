@@ -137,6 +137,29 @@ class RaffleModel {
         }
     }
 
+    static async updateActiveRaffleParticipants(id_rifa) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`UPDATE rifas
+    SET
+      participantes = (
+        SELECT COUNT(DISTINCT pagos.id_usuario)
+        FROM pagos
+        WHERE pagos.id_rifa = rifas.id
+      ),
+      fondos_recaudados = (
+        SELECT SUM(pagos.total)
+        FROM pagos
+        WHERE pagos.id_rifa = rifas.id
+      )
+    WHERE rifas.id = ?;`, [id_rifa])
+
+        } catch (error) {
+            console.error('Error con el proceso de rifa activa', error);
+            throw error;
+        }
+    }
+
 
 }
 

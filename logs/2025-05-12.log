@@ -1,85 +1,14 @@
-[2025-05-12] Error: Unknown column 'updatedAt' in 'field list'
-    at PromisePool.execute (C:\Users\Windows10\Desktop\dedezero-server\node_modules\mysql2\lib\promise\pool.js:54:22)
-    at UserModel.updateConfigWeb (C:\Users\Windows10\Desktop\dedezero-server\src\models\UserModel.js:52:39)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async saveConfigWeb (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\UserController.js:38:17)
-[2025-05-12] Error: Unknown column 'updatedAt' in 'field list'
-    at PromisePool.execute (C:\Users\Windows10\Desktop\dedezero-server\node_modules\mysql2\lib\promise\pool.js:54:22)
-    at UserModel.updateConfigWeb (C:\Users\Windows10\Desktop\dedezero-server\src\models\UserModel.js:52:39)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async saveConfigWeb (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\UserController.js:38:17)
-[2025-05-12] Error: net::ERR_NAME_NOT_RESOLVED at https://monitordolarvenezuela.com/
-    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
-    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
-    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
-    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
-    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:89:13)
-[2025-05-12] Error: net::ERR_NAME_NOT_RESOLVED at https://monitordolarvenezuela.com/
-    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
-    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
-    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
-    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
-    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:89:13)
-[2025-05-12] Error: net::ERR_NAME_NOT_RESOLVED at https://monitordolarvenezuela.com/
-    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
-    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
-    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
-    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
-    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:89:13)
-[2025-05-12] Error: net::ERR_NAME_NOT_RESOLVED at https://monitordolarvenezuela.com/
-    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
-    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
-    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
-    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
-    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:89:13)
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
-[2025-05-12] ERROR FORZADO
+[2025-05-12] Duplicate entry '' for key 'correo'
+[2025-05-12] No hay rifas activas, no se puede crear el pago
+[2025-05-12] No hay rifas activas, no se puede crear el pago
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'pay')
+[2025-05-12] Cannot read properties of undefined (reading 'id')
+[2025-05-12] Cannot read properties of undefined (reading 'id')
 [2025-05-12] TimeoutError: Navigation timeout of 20000 ms exceeded
     at Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
     at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
@@ -87,7 +16,7 @@
     at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
     at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
     at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
-    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:90:24)
+    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:92:24)
 [2025-05-12] TimeoutError: Navigation timeout of 20000 ms exceeded
     at Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
     at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
@@ -95,7 +24,7 @@
     at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
     at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
     at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
-    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:90:24)
+    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:92:24)
 [2025-05-12] TimeoutError: Navigation timeout of 20000 ms exceeded
     at Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
     at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
@@ -103,7 +32,7 @@
     at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
     at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
     at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
-    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:90:24)
+    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:92:24)
 [2025-05-12] TimeoutError: Navigation timeout of 20000 ms exceeded
     at Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
     at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
@@ -111,12 +40,9 @@
     at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
     at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
     at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
-    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:90:24)
-[2025-05-12] TimeoutError: Navigation timeout of 20000 ms exceeded
-    at Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
-    at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
-    at new LifecycleWatcher (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\LifecycleWatcher.js:69:60)
-    at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
-    at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
-    at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
-    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:90:24)
+    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:92:24)
+[2025-05-12] Incorrect arguments to mysqld_stmt_execute
+[2025-05-12] Incorrect arguments to mysqld_stmt_execute
+[2025-05-12] Incorrect arguments to mysqld_stmt_execute
+[2025-05-12] Incorrect arguments to mysqld_stmt_execute
+[2025-05-12] Incorrect arguments to mysqld_stmt_execute

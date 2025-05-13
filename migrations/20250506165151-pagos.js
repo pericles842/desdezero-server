@@ -16,8 +16,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      id_rifa: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       total: {
         type: Sequelize.DOUBLE
+      },
+      cantidad_tickets: {
+        type: Sequelize.INTEGER
       },
       total_bs: {
         type: Sequelize.DOUBLE
@@ -54,6 +61,18 @@ module.exports = {
       name: 'fk_pagos_metodo_pago',
       references: {
         table: 'metodos_pago',
+        field: 'id'
+      },
+      onDelete: 'CASCADE'
+    });
+
+
+    await queryInterface.addConstraint('pagos', {
+      fields: ['id_rifa'],
+      type: 'foreign key',
+      name: 'fk_pagos_rifa',
+      references: {
+        table: 'rifas',
         field: 'id'
       },
       onDelete: 'CASCADE'
