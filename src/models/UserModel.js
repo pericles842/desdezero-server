@@ -153,7 +153,7 @@ class UserModel {
 
             const [[statsRow]] = await db.execute(`
               SELECT 
-                (SELECT COUNT(DISTINCT pagos.id_usuario) FROM pagos) AS participantes,
+                (SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
                 (SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
                 (SELECT COUNT(ganadores.id) FROM ganadores) AS premios,
                 (SELECT COUNT(rifas.id) FROM rifas WHERE rifas.status = 'activa') AS rifas_activas

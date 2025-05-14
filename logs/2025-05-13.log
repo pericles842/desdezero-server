@@ -1,0 +1,139 @@
+[2025-05-13] Error: net::ERR_SOCKET_NOT_CONNECTED at https://monitordolarvenezuela.com/
+    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
+    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
+    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
+    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
+    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:91:13)
+[2025-05-13] referencia is not defined
+[2025-05-13] TimeoutError: Navigation timeout of 20000 ms exceeded
+    at new Deferred (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
+    at Deferred.create (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
+    at new LifecycleWatcher (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\LifecycleWatcher.js:69:60)
+    at CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:148:29)
+    at CdpFrame.<anonymous> (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
+    at CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:43)
+    at getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:91:24)
+[2025-05-13] Bind parameters must not contain undefined. To pass SQL NULL specify JS null
+[2025-05-13] cantidad is not defined
+[2025-05-13] cantidad is not defined
+[2025-05-13] nuevos is not defined
+[2025-05-13] nuevos is not defined
+[2025-05-13] nuevos is not defined
+[2025-05-13] tikes_existentes.has is not a function
+[2025-05-13] tikes_existentes.has is not a function
+[2025-05-13] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?' at line 1
+[2025-05-13] Column 'id_pago' cannot be null
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\compra.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:13:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:211:29)
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\compra.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:13:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:211:29)
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\compra.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:211:29)
+[2025-05-13] ReferenceError: C:\Users\Windows10\Desktop\dedezero-server\src\views\correo.ejs:93
+    91| 				</strong> el <%= fecha %>.</p>
+    92| 			<p> Te informamos que estás participando en la rifa <strong>
+ >> 93| 						<%= nombre_rifa %>
+    94| 					</strong></p>
+    95| 
+    96| 			<p>Mucha suerte! Gracias por confiar en nosotros.</p>
+
+nombre_rifa is not defined
+    at eval ("C:\\Users\\Windows10\\Desktop\\dedezero-server\\src\\views\\correo.ejs":21:26)
+    at correo (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:703:17)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:40
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:211:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-05-13] ReferenceError: C:\Users\Windows10\Desktop\dedezero-server\src\views\correo.ejs:101
+    99| 			<h3>DETALLES DE PAGO</h3>
+    100| 			<p><strong># Tickets:</strong>
+ >> 101| 				<%= cantidad_tickets %>
+    102| 			</p>
+    103| 			<p><strong>Total:</strong>
+    104| 				<%= total %> $
+
+cantidad_tickets is not defined
+    at eval ("C:\\Users\\Windows10\\Desktop\\dedezero-server\\src\\views\\correo.ejs":24:26)
+    at correo (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:703:17)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:40
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:212:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\correso.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:216:46)
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\correso.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:216:46)
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\cosreo.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:218:47)
+[2025-05-13] email is not defined
+[2025-05-13] Error: ENOENT: no such file or directory, open 'C:\Users\Windows10\Desktop\dedezero-server\src\views\corsreo.ejs'
+    at Object.openSync (node:fs:561:18)
+    at Object.readFileSync [as fileLoader] (node:fs:445:35)
+    at fileLoader (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:293:18)
+    at handleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:233:16)
+    at C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:260:20
+    at new Promise (<anonymous>)
+    at tryHandleCache (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:258:14)
+    at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
+    at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
+    at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:218:47)

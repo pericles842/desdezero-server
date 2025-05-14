@@ -1,4 +1,5 @@
 const { poolPromise } = require('../config/db');
+const TikeModel = require('../models/TikeModel');
 
 class PayModel {
 
@@ -110,12 +111,25 @@ class PayModel {
             const db = await poolPromise; // Esperamos la conexión
 
             const [{ insertId }] = await db.execute(
-                `INSERT INTO pagos (id_usuario, id_metodo_pago, total, total_bs, tasa,
-                 comprobante, estatus, fecha, cantidad_tickets, id_rifa)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [payment.id_usuario, payment.id_metodo_pago, payment.total,
+                `INSERT INTO pagos (
+                id_metodo_pago,
+                total,
+                total_bs,
+                tasa,
+                comprobante,
+                estatus,
+                fecha,
+                cantidad_tickets,
+                id_rifa,
+                referencia, 
+                nombre,
+                correo,
+                telefono)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [payment.id_metodo_pago, payment.total,
                 payment.total_bs, payment.tasa, payment.comprobante, payment.status, payment.fecha,
-                payment.cantidad_tickets, payment.id_rifa]
+                payment.cantidad_tickets, payment.id_rifa, payment.referencia,
+                payment.nombre, payment.correo, payment.telefono]
             );
 
 
@@ -135,25 +149,33 @@ class PayModel {
             const db = await poolPromise; // Esperamos la conexión
             const [rows] = await db.execute(
                 `SELECT 
-pagos.id,
-usuarios.nombre usuario,
-CONCAT('+',usuarios.telefono) telefono ,
-pagos.comprobante,
-pagos.cantidad_tickets,
-pagos.estatus,
-pagos.total,
-pagos.total_bs,
-metodos_pago.nombre metodo_pago,
-metodos_pago.tipo,
-pagos.fecha,
-rifas.nombre rifa
+    pagos.id,
+    pagos.nombre AS usuario,
+    pagos.referencia,
+    pagos.correo,
+    CONCAT('+', pagos.telefono) AS telefono,
+    pagos.comprobante,
+    pagos.cantidad_tickets,
+    pagos.estatus,
+    pagos.total,
+    pagos.tasa,
+    pagos.total_bs,
+    metodos_pago.nombre AS metodo_pago,
+    metodos_pago.tipo,
+    pagos.fecha,
+    rifas.nombre AS rifa,
+   GROUP_CONCAT(tickets.codigo ORDER BY tickets.codigo SEPARATOR ',') AS tikes
 FROM pagos
-INNER JOIN usuarios on usuarios.id = pagos.id_usuario
-INNER JOIN rifas on rifas.id = pagos.id_rifa
-INNER JOIN metodos_pago on metodos_pago.id = pagos.id_metodo_pago
-ORDER by pagos.fecha
-`
-            );
+INNER JOIN rifas ON rifas.id = pagos.id_rifa
+INNER JOIN metodos_pago ON metodos_pago.id = pagos.id_metodo_pago
+LEFT JOIN tickets ON tickets.id_pago = pagos.id
+WHERE rifas.id = (
+    SELECT MAX(id)
+    FROM rifas
+    WHERE status = 'activa'
+)
+GROUP BY pagos.id
+ORDER BY pagos.fecha;`);
 
             return rows;
 
@@ -165,6 +187,22 @@ ORDER by pagos.fecha
         }
     }
 
+    static async approveSale(id_payment) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`UPDATE pagos SET estatus = 'aprobado' WHERE id = ?`, [id_payment]);
+            const [[pay]] = await db.execute(`SELECT * FROM pagos WHERE id = ?`, [id_payment]);
+            return pay;
+
+        } catch (error) {
+            if (error instanceof Error) {
+                error.message;
+            }
+            throw error.message;
+        }
+    }
+
+    approveSale
 }
 
 module.exports = PayModel;

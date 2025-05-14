@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      id_usuario: {
+      id_pago: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
@@ -38,11 +38,11 @@ module.exports = {
     });
 
     await queryInterface.addConstraint('tickets', {
-      fields: ['id_usuario'],
+      fields: ['id_pago'],
       type: 'foreign key',
-      name: 'fk_tickets_usuario',
+      name: 'fk_tickets_pagos',
       references: {
-        table: 'usuarios',
+        table: 'pagos',
         field: 'id'
       },
       onDelete: 'CASCADE'

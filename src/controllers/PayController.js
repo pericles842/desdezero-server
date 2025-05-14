@@ -1,10 +1,15 @@
-const PayModel = require('../models/PayModel');
-const UserModel = require('../models/UserModel');
-const RaffleModel = require('../models/RaffleModel');
-const { validationResult } = require('express-validator');
 const { saveImageToFolder, deleteImageFromFolder } = require('../utils/Upload');
-const logError = require('../utils/LogsCapture');
+const { validationResult } = require('express-validator');
 const puppeteer = require('puppeteer');
+const moment = require('moment');
+require('moment/locale/es');
+moment.locale('es');
+
+const PayModel = require('../models/PayModel');
+const TikeModel = require('../models/TikeModel');
+const RaffleModel = require('../models/RaffleModel');
+const logError = require('../utils/LogsCapture');
+const EmailController = require('../controllers/EmailController');
 
 require('dotenv').config();
 
@@ -125,15 +130,11 @@ const PayController = {
             let body = JSON.parse(req.body.pay)
 
             //extraemos usuarios
-            const { id, nombre, correo, cod_num, telefono, password, creado_en } = body
-            let user = { id, nombre, correo, telefono, password, creado_en, cod_num };
+            const { cod_num, telefono } = body
+            let user = { telefono, cod_num };
 
             //codigo de numero mas el telefono
             user.telefono = user.cod_num.replace('+', '') + '' + user.telefono
-
-            //verificamos si ya existe el usuario, para ver si o creamos o no 
-            let userExist = await UserModel.searchUserByPhone(user.telefono)
-            user = userExist.length == 0 ? await UserModel.saveUser(user) : userExist
 
             //verificamos si existe una rifa activa  
             let rifa_activa = await RaffleModel.getRaffleActive()
@@ -142,15 +143,18 @@ const PayController = {
 
 
             //extremos los datos del pago
-            let { total, total_bs, tasa, comprobante, status, cantidad_tickets } = body
+            let { total, total_bs, tasa,
+                comprobante, status, cantidad_tickets,
+                nombre, correo, referencia } = body
+
             let pay = {
                 id: 0, total, total_bs, tasa, comprobante, status, cantidad_tickets,
-                id_usuario: user.id,
+                nombre, correo, referencia,
                 id_metodo_pago: body.detalle_metodo_pago.id,
                 id_rifa: rifa_activa.id,
+                telefono: user.telefono,
                 fecha: new Date()
             }
-
             if (req.file) {
                 //!si la imagen se repite no agregar otra
                 // if (pay.url_img.trim()) await deleteImageFromFolder(pay.url_img)
@@ -169,7 +173,7 @@ const PayController = {
             await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
 
 
-            res.send({ ...pay, nombre, telefono });
+            res.send(pay);
         } catch (error) {
             logError(error.message);
             res.status(500).send(error);
@@ -180,6 +184,46 @@ const PayController = {
 
             const sales = await PayModel.getSales()
             res.send(sales)
+        } catch (error) {
+            logError(error.message)
+            res.status(500).send(error)
+        }
+    },
+    approveSale: async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errores: errors.array() });
+            }
+
+            const { id } = req.params
+            const sales = await PayModel.approveSale(id)
+            let rifa_activa = await RaffleModel.getRaffleActive()
+            let tikes = await TikeModel.generateTikes(sales.cantidad_tickets, rifa_activa.id)
+            await TikeModel.saveTikes(tikes, rifa_activa.id, id)
+
+            let correo = {
+                nombre: sales.nombre,
+                telefono: sales.telefono,
+                correo: sales.correo,
+                total: sales.total,
+                fecha: moment(sales.fecha).format('D [de] MMMM [de] YYYY'),
+                tikes: tikes,
+                cantidad_tickets: sales.cantidad_tickets,
+                nombre_rifa: rifa_activa.nombre
+            }
+
+             let email;
+             try {
+                 email = await EmailController.sendEmail(correo);
+             } catch (error) { email = error }
+
+            let sale = await PayModel.getSales()
+
+            sale = await PayModel.getSales()
+            sale = sale.find(sale => sale.id === parseInt(id, 10));
+
+            res.send({ sale, email })
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)

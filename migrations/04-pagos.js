@@ -8,8 +8,20 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      id_usuario: {
-        type: Sequelize.INTEGER,
+      nombre: {
+        type: Sequelize.STRING(160),
+        allowNull: false
+      },
+      telefono: {
+        type: Sequelize.STRING(160),
+        allowNull: false
+      },
+      correo: {
+        type: Sequelize.STRING(160),
+        allowNull: false
+      },
+      referencia: {
+        type: Sequelize.STRING(160),
         allowNull: false
       },
       id_metodo_pago: {
@@ -43,18 +55,7 @@ module.exports = {
       }
     });
 
-    // Agregar claves foráneas
-    await queryInterface.addConstraint('pagos', {
-      fields: ['id_usuario'],
-      type: 'foreign key',
-      name: 'fk_pagos_usuario',
-      references: {
-        table: 'usuarios',
-        field: 'id'
-      },
-      onDelete: 'CASCADE'
-    });
-
+   
     await queryInterface.addConstraint('pagos', {
       fields: ['id_metodo_pago'],
       type: 'foreign key',

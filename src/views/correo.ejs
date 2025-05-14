@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Pago Verificado</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: #1e1e1e;
+			font-family: Arial, sans-serif;
+			color: #ffffff;
+			line-height: 1.5;
+		}
+
+		.container {
+			max-width: 600px;
+			margin: auto;
+			background: #2c2c2c;
+			border-radius: 8px;
+			overflow: hidden;
+		}
+
+		.header {
+			background-color: #242424;
+			text-align: center;
+			padding: 20px;
+		}
+
+		.header img {
+			max-width: 200px;
+		}
+
+		.content {
+			padding: 20px;
+			text-align: center;
+		}
+
+		.content h2 {
+			color: #ecb444;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.content p {
+			font-size: 16px;
+			margin: 5px 0;
+			color: #dcdcdc;
+		}
+
+		.details {
+			margin-top: 30px;
+			padding: 20px;
+			text-align: left;
+			border-top: 1px solid #444;
+			background-color: #ecb444
+		}
+
+		.details h3 {
+			margin-bottom: 10px;
+			color: #242424;
+		}
+
+		.details p {
+			margin: 5px 0;
+			color: #242424;
+
+		}
+
+		.tike {
+			padding: 10px;
+			background-color: #242424;
+			font-size: 20px;
+			border-radius: 8px;
+
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<img src="cid:logo" alt="Logo" />
+		</div>
+		<div class="content">
+			<img src="cid:verificado" width="100" alt="v" />
+			<h2>Pago Verificado</h2>
+			<p>Hola <b>
+					<%= nombre %>
+				</b>,</p>
+			<p>Gracias por tu pago de <strong>
+					<%= total %>$
+				</strong> el <%= fecha %>.</p>
+			<p> Te informamos que estás participando en la rifa <strong>
+					<%= nombre_rifa %>
+				</strong></p>
+
+			<p>Mucha suerte! Gracias por confiar en nosotros.</p>
+		</div>
+		<div class="details">
+			<h3>DETALLES DE PAGO</h3>
+			<p><strong>Tickets:</strong>
+				<%= cantidad_tickets %>
+			</p>
+			<p><strong>Total:</strong>
+				<%= total %> $
+			</p>
+			<p><strong>Fecha:</strong>
+				<%= fecha %>
+			</p>
+		</div>
+
+		<div class="details" style="margin: 0;">
+			<h3>TUS TICKETS</h3>
+			<div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: start;">
+				<% tikes.forEach(tike=> { %>
+					<p style="color: #fff;" class="tike">
+						<%= tike %>
+					</p>
+					<% }); %>
+			</div>
+		</div>
+
+		<div class="footer">
+			<p style="text-align: center; color: #999; font-size: 12px;">&copy; 2025 DesdeZero. Todos los derechos
+				reservados.
+			</p>
+		</div>
+</body>
+
+</html>

@@ -143,7 +143,7 @@ class RaffleModel {
             await db.execute(`UPDATE rifas
     SET
       participantes = (
-        SELECT COUNT(DISTINCT pagos.id_usuario)
+        SELECT COUNT(DISTINCT pagos.correo, pagos.telefono)
         FROM pagos
         WHERE pagos.id_rifa = rifas.id
       ),
