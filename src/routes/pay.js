@@ -17,7 +17,8 @@ router.post('/create-pay', upload.single('image'), PayController.createUserPayme
 router.get('/sales', AuthTokenHeader, PayController.getSales)
 
 
-router.get('/approve-sale/:id', AuthTokenHeader, [param('id').exists().withMessage('El id es obligatorio')], PayController.approveSale)
+router.get('/approve-sale/:id', AuthTokenHeader, [param('id').exists().withMessage('El id es obligatorio')], PayController.approveSale);
+router.get('/reject-sale/:id', AuthTokenHeader, [param('id').exists().withMessage('El id es obligatorio')], PayController.rejectSale);
 
 
 module.exports = router;

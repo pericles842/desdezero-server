@@ -167,6 +167,95 @@ class RaffleModel {
         }
     }
 
+    /**
+     * Crea a un ganador
+     *
+     * @static
+     * @param {*} ganador
+     * @return {*} 
+     * @memberof RaffleModel
+     */
+    static async createWinner(ganador) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            const [{ insertId }] = await db.execute(`INSERT INTO ganadores
+                (nombre, telefono, tike_ganador, nombre_rifa, fecha) VALUES
+                (?, ?, ?, ?, ?);`,
+                [ganador.nombre, ganador.telefono, ganador.tike_ganador, ganador.nombre_rifa, ganador.fecha]
+            );
+
+            ganador.id = insertId;
+
+            return ganador;
+
+        } catch (error) {
+            console.error('Error al insertar el ganador', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Actualiza un ganador
+     *
+     * @static
+     * @param {*} ganador
+     * @return {*} 
+     * @memberof RaffleModel
+     */
+    static async updateWinner(ganador) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`UPDATE ganadores SET
+                    nombre = ?,
+                    telefono = ?,
+                    tike_ganador = ?,
+                    nombre_rifa = ?,
+                    fecha = ?
+                WHERE
+                    id = ?;`,
+                [ganador.nombre, ganador.telefono, ganador.tike_ganador, ganador.nombre_rifa, ganador.fecha, ganador.id]
+            );
+
+            return ganador;
+
+        } catch (error) {
+            console.error('Error al actualizar el ganador', error);
+            throw error;
+        }
+    }
+    /**
+ * Lista los tickets por correo
+ *
+ * @static
+ * @param {*} search
+ * @return {*} 
+ * @memberof RaffleModel
+ */
+    static async getTicketsByEmail(search) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`SET @search = ?;`, [search]);
+
+            const [tickets] = await db.execute(`
+                SELECT pag.*, mtp.nombre AS metodo_pago, rif.nombre AS rifa, tck.codigo tike
+                FROM tickets tck
+                INNER JOIN pagos pag ON pag.id = tck.id_pago
+                INNER JOIN metodos_pago mtp ON mtp.id = pag.id_metodo_pago
+                INNER JOIN rifas rif ON rif.id = pag.id_rifa
+                WHERE
+                    pag.correo COLLATE utf8mb4_unicode_ci = @search AND rif.status = 'activa';`);
+
+            if (!tickets) return { message: 'No se encontraron tickets', rifa_active: false }
+
+            return tickets;
+        } catch (error) {
+            console.error('Error con el proceso de buscar tickets', error);
+            throw error;
+        }
+    }
 
 }
 

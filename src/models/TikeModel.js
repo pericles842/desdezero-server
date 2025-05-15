@@ -53,16 +53,30 @@ class TikeModel {
      * @param {*} id_pago
      * @memberof TikeModel
      */
-    static async saveTikes(tickets, id_rifa, id_pago) {
+    static async saveTikes(tickets, id_rifa, sales) {
         try {
             const db = await poolPromise;
             let creado_en = new Date();
-            const values = tickets.map(ticket => [ticket, id_rifa, id_pago, creado_en]);
+            const values = tickets.map(ticket => [ticket, id_rifa, sales.id, creado_en]);
 
-            await db.query(
-                `INSERT INTO tickets (codigo, id_rifa, id_pago , creado_en) VALUES ?`,
-                [values]
-            );
+            const [[stats]] = await db.execute(`SELECT 
+                            pagos.cantidad_tickets AS tikes_comprados,
+                            COUNT(tickets.id) AS tikes_generados
+                            FROM railway.pagos
+                            left JOIN tickets ON tickets.id_pago = pagos.id
+                            WHERE pagos.id = ?
+                            GROUP BY pagos.cantidad_tickets;`, [sales.id]);
+
+            // si la cantidad de tikes comprados es menor a la cantidad de tikes generados
+            // entonces los tikes se guardan
+            if (stats.tikes_generados < stats.tikes_comprados) {
+                
+                await db.query(
+                    `INSERT INTO tickets (codigo, id_rifa, id_pago , creado_en) VALUES ?`,
+                    [values]
+                );
+            }
+
 
         } catch (error) {
             console.error(error);

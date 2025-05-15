@@ -203,17 +203,26 @@ const PayController = {
             let rifa_activa = await RaffleModel.getRaffleActive()
             // generamos los tikes y comprobamos que no se repitan 
             let tikes = await TikeModel.generateTikes(sales.cantidad_tickets, rifa_activa.id)
+            //guardamos los tikes , saveTikes ya valida que no se repitan
+            await TikeModel.saveTikes(tikes, rifa_activa.id, sales)
             await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
-            //guardamos los tikes
-            await TikeModel.saveTikes(tikes, rifa_activa.id, id)
 
+            //obtenemos las ventas con los tikes 
+            let sale = await PayModel.getSales()
+
+            //filtramos por el pago en cuestion
+            sale = sale.find(sale => sale.id === parseInt(id, 10));
+            
+            let tikes_generados_correo = sale.tikes != null ? sale.tikes.split(',').map((tike) => tike.trim()) : []
+            
+            //obejeto del correo
             let correo = {
                 nombre: sales.nombre,
                 telefono: sales.telefono,
                 correo: sales.correo,
                 total: sales.total,
                 fecha: moment(sales.fecha).format('D [de] MMMM [de] YYYY'),
-                tikes: tikes,
+                tikes: tikes_generados_correo,
                 cantidad_tickets: sales.cantidad_tickets,
                 nombre_rifa: rifa_activa.nombre
             }
@@ -223,12 +232,30 @@ const PayController = {
                 email = await EmailController.sendEmail(correo);
             } catch (error) { email = error }
 
-            let sale = await PayModel.getSales()
-
-            sale = await PayModel.getSales()
-            sale = sale.find(sale => sale.id === parseInt(id, 10));
 
             res.send({ sale, email })
+        } catch (error) {
+            logError(error.message)
+            res.status(500).send(error)
+        }
+    },
+    rejectSale: async (req, res) => {
+        try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errores: errors.array() });
+            }
+
+            const { id } = req.params;
+
+            await PayModel.rejectSale(id);
+
+            let sale = await PayModel.getSales();
+
+            sale = sale.find(sale => sale.id === parseInt(id, 10));
+
+            res.send({ sale });
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)

@@ -76,6 +76,22 @@ const RaffleController = {
             res.status(500).send('Error al cargar la rifa', error.message);
         }
     },
+    getTicketsByEmail: async (req, res) => {
+        try {
+            const { search } = req.params; // Extraer el parámetro 'search' de los query params
+
+            if (!search) {
+                return res.status(400).send('El parámetro "search" es requerido.');
+            }
+
+            const tickets = await RaffleModel.getTicketsByEmail(search);
+
+            res.send(tickets);
+        } catch (error) {
+            logError(error);
+            res.status(500).send('Error al listar tickets por búsqueda', error.message);
+        }
+    },
     deleteRaffle: async (req, res) => {
         try {
             const { id } = req.params
@@ -86,6 +102,25 @@ const RaffleController = {
         } catch (error) {
             logError(error)
             res.status(500).send('Error al cargar la rifa', error.message);
+        }
+    },
+    createWinner: async (req, res) => {
+        try {
+            //ERRORES QUE DEFINOMOS EN LA RUTAS
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty())
+                return res.status(400).json({ errores: errors.array() });
+
+            // let ganador = JSON.parse(req.body.ganador);
+            let ganador = req.body.ganador;
+
+            ganador = !ganador.id ? await RaffleModel.createWinner(ganador) : await RaffleModel.updateWinner(ganador);
+
+            res.send(ganador);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
         }
     }
 };
