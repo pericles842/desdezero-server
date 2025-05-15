@@ -76,6 +76,22 @@ const RaffleController = {
             res.status(500).send('Error al cargar la rifa', error.message);
         }
     },
+    getTicketsByEmail: async (req, res) => {
+        try {
+            const { search } = req.query; // Extraer el parámetro 'search' de los query params
+
+            if (!search) {
+                return res.status(400).send('El parámetro "search" es requerido.');
+            }
+
+            const tickets = await RaffleModel.getTicketsByEmail(search);
+
+            res.send(tickets);
+        } catch (error) {
+            logError(error);
+            res.status(500).send('Error al listar tickets por búsqueda', error.message);
+        }
+    },
     deleteRaffle: async (req, res) => {
         try {
             const { id } = req.params

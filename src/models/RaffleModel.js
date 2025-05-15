@@ -137,6 +137,37 @@ class RaffleModel {
         }
     }
 
+    /**
+     * Lista los tickets por correo
+     *
+     * @static
+     * @param {*} search
+     * @return {*} 
+     * @memberof RaffleModel
+     */
+    static async getTicketsByEmail(search) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`SET @search = ?;`, [search]);
+
+            const [tickets] = await db.execute(`SELECT pag.*, mtp.nombre AS metodo_pago, rif.nombre AS rifa, tck.codigo tike
+                FROM tickets tck
+                INNER JOIN pagos pag ON pag.id = tck.id_pago
+                INNER JOIN metodos_pago mtp ON mtp.id = pag.id_metodo_pago
+                INNER JOIN rifas rif ON rif.id = pag.id_rifa
+                WHERE
+                    pag.correo COLLATE utf8mb4_unicode_ci = @search AND rif.status = 'activa';`);
+
+            if (!tickets) return { message: 'No se encontraron tickets', rifa_active: false }
+
+            return tickets;
+        } catch (error) {
+            console.error('Error con el proceso de buscar tickets', error);
+            throw error;
+        }
+    }
+
     static async updateActiveRaffleParticipants(id_rifa) {
         try {
             const db = await poolPromise; // Esperamos la conexión
