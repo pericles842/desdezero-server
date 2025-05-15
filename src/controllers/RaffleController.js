@@ -87,6 +87,25 @@ const RaffleController = {
             logError(error)
             res.status(500).send('Error al cargar la rifa', error.message);
         }
+    },
+    createWinner: async (req, res) => {
+        try {
+            //ERRORES QUE DEFINOMOS EN LA RUTAS
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty())
+                return res.status(400).json({ errores: errors.array() });
+
+            // let ganador = JSON.parse(req.body.ganador);
+            let ganador = req.body.ganador;
+
+            ganador = !ganador.id ? await RaffleModel.createWinner(ganador) : await RaffleModel.updateWinner(ganador);
+
+            res.send(ganador);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
     }
 };
 

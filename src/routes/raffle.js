@@ -17,4 +17,6 @@ router.get('/activate/:id', AuthTokenHeader, [param('id').exists().withMessage('
 router.get('/active', RaffleController.getRaffleActive)
 router.delete('/delete/:id',AuthTokenHeader,RaffleController.deleteRaffle)
 
+router.post('/winner/create', AuthTokenHeader, RaffleController.createWinner); // Crea o actualiza un ganador
+
 module.exports = router;

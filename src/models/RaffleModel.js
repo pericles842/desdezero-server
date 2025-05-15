@@ -141,18 +141,18 @@ class RaffleModel {
         try {
             const db = await poolPromise; // Esperamos la conexión
             await db.execute(`UPDATE rifas
-    SET
-      participantes = (
-        SELECT COUNT(DISTINCT pagos.correo, pagos.telefono)
-        FROM pagos
-        WHERE pagos.id_rifa = rifas.id
-      ),
-      fondos_recaudados = (
-        SELECT SUM(pagos.total)
-        FROM pagos
-        WHERE pagos.id_rifa = rifas.id
-      )
-    WHERE rifas.id = ?;`, [id_rifa])
+                SET
+                participantes = (
+                    SELECT COUNT(DISTINCT pagos.correo, pagos.telefono)
+                    FROM pagos
+                    WHERE pagos.id_rifa = rifas.id
+                ),
+                fondos_recaudados = (
+                    SELECT SUM(pagos.total)
+                    FROM pagos
+                    WHERE pagos.id_rifa = rifas.id
+                )
+                WHERE rifas.id = ?;`, [id_rifa])
 
         } catch (error) {
             console.error('Error con el proceso de rifa activa', error);
@@ -160,6 +160,64 @@ class RaffleModel {
         }
     }
 
+    /**
+     * Crea a un ganador
+     *
+     * @static
+     * @param {*} ganador
+     * @return {*} 
+     * @memberof RaffleModel
+     */
+    static async createWinner(ganador) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            const [{ insertId }] = await db.execute(`INSERT INTO ganadores
+                (nombre, telefono, tike_ganador, nombre_rifa, fecha) VALUES
+                (?, ?, ?, ?, ?);`,
+                [ganador.nombre, ganador.telefono, ganador.tike_ganador, ganador.nombre_rifa, ganador.fecha]
+            );
+
+            ganador.id = insertId;
+
+            return ganador;
+
+        } catch (error) {
+            console.error('Error al insertar el ganador', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Actualiza un ganador
+     *
+     * @static
+     * @param {*} ganador
+     * @return {*} 
+     * @memberof RaffleModel
+     */
+    static async updateWinner(ganador) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`UPDATE ganadores SET
+                    nombre = ?,
+                    telefono = ?,
+                    tike_ganador = ?,
+                    nombre_rifa = ?,
+                    fecha = ?
+                WHERE
+                    id = ?;`,
+                [ganador.nombre, ganador.telefono, ganador.tike_ganador, ganador.nombre_rifa, ganador.fecha, ganador.id]
+            );
+
+            return ganador;
+
+        } catch (error) {
+            console.error('Error al actualizar el ganador', error);
+            throw error;
+        }
+    }
 
 }
 
