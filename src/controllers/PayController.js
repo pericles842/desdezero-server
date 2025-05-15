@@ -197,9 +197,14 @@ const PayController = {
             }
 
             const { id } = req.params
+            //aprobamos la venta
             const sales = await PayModel.approveSale(id)
+            //obtenemos la rifa activa
             let rifa_activa = await RaffleModel.getRaffleActive()
+            // generamos los tikes y comprobamos que no se repitan 
             let tikes = await TikeModel.generateTikes(sales.cantidad_tickets, rifa_activa.id)
+            await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
+            //guardamos los tikes
             await TikeModel.saveTikes(tikes, rifa_activa.id, id)
 
             let correo = {
@@ -213,10 +218,10 @@ const PayController = {
                 nombre_rifa: rifa_activa.nombre
             }
 
-             let email;
-             try {
-                 email = await EmailController.sendEmail(correo);
-             } catch (error) { email = error }
+            let email;
+            try {
+                email = await EmailController.sendEmail(correo);
+            } catch (error) { email = error }
 
             let sale = await PayModel.getSales()
 

@@ -31,7 +31,7 @@ const RaffleController = {
         try {
 
             let config = req.body.config
-            
+
             config = config.id == 0 ?
                 await UserModel.saveConfigWeb(config) :
                 await UserModel.updateConfigWeb(config)
@@ -45,6 +45,16 @@ const RaffleController = {
     getConfig: async (req, res) => {
         try {
             let config = await UserModel.getConfig()
+
+            res.send(config);
+        } catch (error) {
+            logError(error.message)
+            res.status(500).send(error.message);
+        }
+    },
+    adminStatistics: async (req, res) => {
+        try {
+            let config = await UserModel.adminStatistics()
 
             res.send(config);
         } catch (error) {

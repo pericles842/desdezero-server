@@ -11,6 +11,7 @@ const EmailController = require('../controllers/EmailController');
 router.post('/auth', UserController.authUserMaster);
 router.post('/create-config', AuthTokenHeader, UserController.saveConfigWeb);
 router.get('/config', UserController.getConfig);
+router.get('/admin-statistics', AuthTokenHeader, UserController.adminStatistics);
 //router.get('/send-email', EmailController.sendEmail);
 
 

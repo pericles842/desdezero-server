@@ -1,0 +1,7 @@
+[2025-05-15] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'count(tickets.id) tikes
+from rifas 
+inner join tickets on tickets.id_rifa = rifa' at line 1
+[2025-05-15] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') fondos_recaudados, 
+count(tickets.id) tikes
+from rifas 
+inner join tickets on ' at line 3

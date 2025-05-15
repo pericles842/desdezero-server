@@ -119,3 +119,11 @@
     at exports.renderFile (C:\Users\Windows10\Desktop\dedezero-server\node_modules\ejs\lib\ejs.js:491:10)
     at Object.sendEmail (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\EmailController.js:15:30)
     at approveSale (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:218:48)
+[2025-05-14] Error: net::ERR_CONNECTION_CLOSED at https://monitordolarvenezuela.com/
+    at navigate (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:183:27)
+    at async Deferred.race (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:36:20)
+    at async CdpFrame.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:25)
+    at async CdpPage.goto (C:\Users\Windows10\Desktop\dedezero-server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:574:20)
+    at async getDollarRates (C:\Users\Windows10\Desktop\dedezero-server\src\controllers\PayController.js:96:13)
+[2025-05-14] read ECONNRESET
+[2025-05-14] read ECONNRESET

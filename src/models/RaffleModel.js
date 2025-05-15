@@ -137,6 +137,13 @@ class RaffleModel {
         }
     }
 
+    /**
+     *Actualiza el participates y el total 
+     *
+     * @static
+     * @param {*} id_rifa
+     * @memberof RaffleModel
+     */
     static async updateActiveRaffleParticipants(id_rifa) {
         try {
             const db = await poolPromise; // Esperamos la conexión
@@ -150,7 +157,7 @@ class RaffleModel {
       fondos_recaudados = (
         SELECT SUM(pagos.total)
         FROM pagos
-        WHERE pagos.id_rifa = rifas.id
+        WHERE pagos.id_rifa = rifas.id and pagos.estatus = 'aprobado'
       )
     WHERE rifas.id = ?;`, [id_rifa])
 

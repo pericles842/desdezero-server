@@ -73,6 +73,9 @@
 			background-color: #242424;
 			font-size: 20px;
 			border-radius: 8px;
+			color: #fff;
+			text-align: center;
+			font-weight: bold;
 
 		}
 	</style>
@@ -113,13 +116,19 @@
 
 		<div class="details" style="margin: 0;">
 			<h3>TUS TICKETS</h3>
-			<div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: start;">
-				<% tikes.forEach(tike=> { %>
-					<p style="color: #fff;" class="tike">
-						<%= tike %>
-					</p>
-					<% }); %>
-			</div>
+			<table cellpadding="5" cellspacing="5" border="0" style="width: 100%; max-width: 600px;">
+				<tr>
+					<% tikes.forEach((tike, index)=> { %>
+						<% if (index % 4===0 && index !==0) { %>
+				</tr>
+				<tr>
+					<% } %>
+						<td class="tike">
+							<%= tike %>
+						</td>
+						<% }); %>
+				</tr>
+			</table>
 		</div>
 
 		<div class="footer">

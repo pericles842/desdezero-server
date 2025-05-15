@@ -1,9 +1,15 @@
 const { poolPromise } = require('../config/db');
 
 class TikeModel {
+
     /**
-     * 
-     * @returns 
+     * Verificamos si los tikes no tiene repetidos y generamos los dígitos 
+     *
+     * @static
+     * @param {*} cantidad_tikes
+     * @param {*} id_rifa
+     * @return {*} 
+     * @memberof TikeModel
      */
     static async generateTikes(cantidad_tikes, id_rifa) {
         try {
@@ -12,8 +18,8 @@ class TikeModel {
             const [tk_rifa] = await db.execute('SELECT codigo FROM tickets WHERE id_rifa = ?', [id_rifa]);
 
             const createTickets = () => {
-                const numero = Math.floor(Math.random() * 10000);
-                return numero; // ya es número, no lo pases a string
+                const numero = Math.floor(1000 + Math.random() * 9000);
+                return numero;
             };
 
             // Creamos un Set con los tickets ya existentes (como números)
@@ -37,6 +43,16 @@ class TikeModel {
             throw error;
         }
     }
+
+    /**
+     *Guardamos un arreglo de tikes en una rifa activa
+     *
+     * @static
+     * @param {*} tickets arregloo de tikes
+     * @param {*} id_rifa
+     * @param {*} id_pago
+     * @memberof TikeModel
+     */
     static async saveTikes(tickets, id_rifa, id_pago) {
         try {
             const db = await poolPromise;

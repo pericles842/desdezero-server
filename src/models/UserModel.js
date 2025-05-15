@@ -153,10 +153,12 @@ class UserModel {
 
             const [[statsRow]] = await db.execute(`
               SELECT 
-                (SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
-                (SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
-                (SELECT COUNT(ganadores.id) FROM ganadores) AS premios,
-                (SELECT COUNT(rifas.id) FROM rifas WHERE rifas.status = 'activa') AS rifas_activas
+	(SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
+	(SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
+	(SELECT COUNT(ganadores.id) FROM ganadores) AS premios,
+	(SELECT COUNT(rifas.id) FROM rifas WHERE rifas.status = 'activa') AS rifas_activas,
+    (SELECT COUNT(tickets.id) FROM tickets 
+    inner join rifas on tickets.id_rifa WHERE rifas.status = 'activa') AS tikes_vendidos_rifa
             `);
 
             const resultado = {
@@ -165,6 +167,48 @@ class UserModel {
             };
 
             return resultado
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(error.message);
+            }
+            throw error;
+        }
+    }
+    static async adminStatistics() {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            const [[configRows]] = await db.execute(`SELECT
+rifas.participantes ,
+concat(rifas.fondos_recaudados,'$') fondos_recaudados, 
+count(tickets.id) tikes
+from rifas 
+inner join tickets on tickets.id_rifa = rifas.id
+where rifas.status = 'activa' 
+group by rifas.id;`);
+
+            let statics = [
+                {
+                    col: 'md:col-4',
+                    icon: 'fa-solid fa-user',
+                    title: 'Participantes',
+                    statistic: configRows.participantes
+                },
+                {
+                    col: 'md:col-4',
+                    icon: 'fa-solid fa-ticket',
+                    title: 'Fondos Recaudados',
+                    statistic: configRows.fondos_recaudados
+                },
+                {
+                    col: 'md:col-4',
+                    icon: 'fa-solid fa-money-bill-trend-up',
+                    title: 'Tickets Vendidos',
+                    statistic: configRows.tikes
+                }
+            ]
+
+            return statics
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error.message);
