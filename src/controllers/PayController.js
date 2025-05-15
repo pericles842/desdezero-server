@@ -213,17 +213,38 @@ const PayController = {
                 nombre_rifa: rifa_activa.nombre
             }
 
-             let email;
-             try {
-                 email = await EmailController.sendEmail(correo);
-             } catch (error) { email = error }
+            let email;
+            try {
+                email = await EmailController.sendEmail(correo);
+            } catch (error) { email = error }
 
             let sale = await PayModel.getSales()
 
-            sale = await PayModel.getSales()
             sale = sale.find(sale => sale.id === parseInt(id, 10));
 
             res.send({ sale, email })
+        } catch (error) {
+            logError(error.message)
+            res.status(500).send(error)
+        }
+    },
+    rejectSale: async (req, res) => {
+        try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errores: errors.array() });
+            }
+
+            const { id } = req.params;
+
+            await PayModel.rejectSale(id);
+
+            let sale = await PayModel.getSales();
+
+            sale = sale.find(sale => sale.id === parseInt(id, 10));
+
+            res.send({ sale });
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)

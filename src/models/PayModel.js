@@ -149,33 +149,33 @@ class PayModel {
             const db = await poolPromise; // Esperamos la conexión
             const [rows] = await db.execute(
                 `SELECT 
-    pagos.id,
-    pagos.nombre AS usuario,
-    pagos.referencia,
-    pagos.correo,
-    CONCAT('+', pagos.telefono) AS telefono,
-    pagos.comprobante,
-    pagos.cantidad_tickets,
-    pagos.estatus,
-    pagos.total,
-    pagos.tasa,
-    pagos.total_bs,
-    metodos_pago.nombre AS metodo_pago,
-    metodos_pago.tipo,
-    pagos.fecha,
-    rifas.nombre AS rifa,
-   GROUP_CONCAT(tickets.codigo ORDER BY tickets.codigo SEPARATOR ',') AS tikes
-FROM pagos
-INNER JOIN rifas ON rifas.id = pagos.id_rifa
-INNER JOIN metodos_pago ON metodos_pago.id = pagos.id_metodo_pago
-LEFT JOIN tickets ON tickets.id_pago = pagos.id
-WHERE rifas.id = (
-    SELECT MAX(id)
-    FROM rifas
-    WHERE status = 'activa'
-)
-GROUP BY pagos.id
-ORDER BY pagos.fecha;`);
+                pagos.id,
+                pagos.nombre AS usuario,
+                pagos.referencia,
+                pagos.correo,
+                CONCAT('+', pagos.telefono) AS telefono,
+                pagos.comprobante,
+                pagos.cantidad_tickets,
+                pagos.estatus,
+                pagos.total,
+                pagos.tasa,
+                pagos.total_bs,
+                metodos_pago.nombre AS metodo_pago,
+                metodos_pago.tipo,
+                pagos.fecha,
+                rifas.nombre AS rifa,
+            GROUP_CONCAT(tickets.codigo ORDER BY tickets.codigo SEPARATOR ',') AS tikes
+            FROM pagos
+            INNER JOIN rifas ON rifas.id = pagos.id_rifa
+            INNER JOIN metodos_pago ON metodos_pago.id = pagos.id_metodo_pago
+            LEFT JOIN tickets ON tickets.id_pago = pagos.id
+            WHERE rifas.id = (
+                SELECT MAX(id)
+                FROM rifas
+                WHERE status = 'activa'
+            )
+            GROUP BY pagos.id
+            ORDER BY pagos.fecha;`);
 
             return rows;
 
@@ -202,7 +202,26 @@ ORDER BY pagos.fecha;`);
         }
     }
 
-    approveSale
+    /**
+     * Rechaza un pago
+     *
+     * @static
+     * @param {*} id_payment
+     * @return {*} 
+     * @memberof PayModel
+     */
+    static async rejectSale(id_payment) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`UPDATE pagos SET estatus = 'rechazado' WHERE id = ?`, [id_payment]);
+        } catch (error) {
+            if (error instanceof Error) {
+                error.message;
+            }
+            throw error.message;
+        }
+    }
+
 }
 
 module.exports = PayModel;
