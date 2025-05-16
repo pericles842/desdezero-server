@@ -179,34 +179,84 @@ class UserModel {
             const db = await poolPromise; // Esperamos la conexión
 
             const [[configRows]] = await db.execute(`SELECT
-rifas.participantes ,
-concat(rifas.fondos_recaudados,'$') fondos_recaudados, 
-count(tickets.id) tikes
-from rifas 
-inner join tickets on tickets.id_rifa = rifas.id
-where rifas.status = 'activa' 
-group by rifas.id;`);
+    rifas.participantes,
+    CONCAT(rifas.fondos_recaudados, '$') AS fondos_recaudados,
+    COUNT(tickets.id) AS tickets,
+
+    -- Método de pago más usado
+    (
+        SELECT 
+            CONCAT(metodos_pago.tipo, ' (', COUNT(*), ' pagos)')
+        FROM pagos
+        INNER JOIN metodos_pago ON metodos_pago.id = pagos.id_metodo_pago
+        WHERE pagos.id_rifa = rifas.id
+        GROUP BY metodos_pago.tipo
+        ORDER BY COUNT(*) DESC
+        LIMIT 1
+    ) AS metodo_pago_mas_usado,
+
+    -- Top 3 compradores por tickets
+    (
+        SELECT 
+            GROUP_CONCAT(CONCAT(correo, ' (', total_tickets, ' tickets)') SEPARATOR ', ')
+        FROM (
+            SELECT 
+                pagos.correo,
+                COUNT(*) AS total_tickets
+            FROM tickets
+            INNER JOIN pagos ON pagos.id = tickets.id_pago
+            WHERE pagos.id_rifa = rifas.id
+            GROUP BY pagos.correo
+            ORDER BY total_tickets DESC
+            LIMIT 5
+        ) AS top_compradores
+    ) AS top_compradores
+
+FROM rifas
+INNER JOIN tickets ON tickets.id_rifa = rifas.id
+WHERE rifas.status = 'activa'
+GROUP BY rifas.id;
+`);
 
             let statics = [
                 {
                     col: 'md:col-4',
                     icon: 'fa-solid fa-user',
                     title: 'Participantes',
-                    statistic: configRows.participantes
+                    statistic: configRows?.participantes ? configRows.participantes : 0
                 },
                 {
                     col: 'md:col-4',
                     icon: 'fa-solid fa-ticket',
                     title: 'Fondos Recaudados',
-                    statistic: configRows.fondos_recaudados
+                    statistic: configRows?.fondos_recaudados ? configRows.fondos_recaudados : 0
                 },
                 {
                     col: 'md:col-4',
                     icon: 'fa-solid fa-money-bill-trend-up',
                     title: 'Tickets Vendidos',
-                    statistic: configRows.tikes
+                    statistic: configRows?.tickets ? configRows.tickets : 0
+                },
+                {
+                    col: 'md:col-6',
+                    icon: 'fa-solid fa-building-columns',
+                    title: 'Pago Mas Usado',
+                    statistic: configRows?.metodo_pago_mas_usado ? configRows.metodo_pago_mas_usado : 0
                 }
             ]
+
+            let top_compradores = [];
+            if (configRows?.top_compradores && configRows?.top_compradores.trim()) {
+                top_compradores = configRows?.top_compradores.split(',');
+            }
+            for (let i = 0; i < top_compradores.length; i++) {
+                statics.push({
+                    col: 'md:col-6',
+                    icon: 'fa-solid fa-user',
+                    title: 'Comprador ' + (i + 1),
+                    statistic: top_compradores[i]
+                })
+            }
 
             return statics
         } catch (error) {
