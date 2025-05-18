@@ -256,7 +256,7 @@ const PayController = {
 
             let correo = {
                 nombre: sale.usuario,
-                telefono: sale.telefono,
+                telefono: config.config.telefono,
                 correo: sale.correo,
                 total: sale.total,
                 fecha: moment(sale.fecha).format('D [de] MMMM [de] YYYY'),
