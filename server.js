@@ -40,6 +40,19 @@ app.get('/correo', (req, res) => {
 
     res.render('correo', data);
 });
+app.get('/rechazar', (req, res) => {
+    const data = {
+        nombre: 'Juan',
+        total: 15,
+        fecha: new Date().toLocaleString(),
+        metodo_pago: 'Zelle',
+        nombre_rifa: 'Sorteo de fin de a o',
+        correo_soporte: 'soporte@desdezerolg.com',
+        telefono: '584129844334'
+    };
+
+    res.render('rechazarPago', data);
+});
 
 const routes = require('./src/routes/routes');
 // Importa rutas

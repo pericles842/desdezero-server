@@ -67,6 +67,23 @@ const RaffleController = {
             res.status(500).send('Error al activar la rifa', error.message);
         }
     },
+    deactivateRaffleProcess: async (req, res) => {
+        try {
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errores: errors.array() });
+            }
+
+            const { id } = req.params
+            const rifa = await RaffleModel.deactivateRaffleProcess(id)
+
+            res.send(rifa);
+        } catch (error) {
+            logError(error)
+            res.status(500).send('Error al activar la rifa', error.message);
+        }
+    },
     getRaffleActive: async (req, res) => {
         try {
             const rifa = await RaffleModel.getRaffleActive()
@@ -94,6 +111,7 @@ const RaffleController = {
     },
     deleteRaffle: async (req, res) => {
         try {
+            //!eliminar imagenes de los pagos asociados
             const { id } = req.params
             const rifa = await RaffleModel.getRaffleById(id)
             await deleteImageFromFolder(rifa.url_img)
@@ -122,7 +140,30 @@ const RaffleController = {
             logError(error)
             res.status(500).send(error.message);
         }
-    }
+    },
+    getUserWin: async (req, res) => {
+        try {
+
+            let ganador = await RaffleModel.gerUserWin()
+
+            res.send(ganador);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
+    },
+    deleteWin: async (req, res) => {
+        try {
+
+            await RaffleModel.deleteWin()
+
+            res.send([]);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
+    },
+
 };
 
 module.exports = RaffleController;

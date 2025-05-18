@@ -15,10 +15,15 @@ router.get('/activate/:id', AuthTokenHeader, [param('id').exists().withMessage('
     RaffleController.activeRaffleProcess);
 //trae la rifa activa
 router.get('/active', RaffleController.getRaffleActive)
-router.delete('/delete/:id',AuthTokenHeader,RaffleController.deleteRaffle)
+router.get('/deactivate/:id', RaffleController.deactivateRaffleProcess);
+
+router.delete('/delete/:id', AuthTokenHeader, RaffleController.deleteRaffle)
 
 router.get('/tickets/:search', RaffleController.getTicketsByEmail); // Listar tickets por busqueda
 
 router.post('/winner/create', AuthTokenHeader, RaffleController.createWinner); // Crea o actualiza un ganador
+router.get('/winner', RaffleController.getUserWin);
+
+router.delete('/winner/delete',AuthTokenHeader, RaffleController.deleteWin);
 
 module.exports = router;

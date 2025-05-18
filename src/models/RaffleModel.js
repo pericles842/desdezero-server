@@ -111,6 +111,21 @@ class RaffleModel {
         }
     }
 
+    static async deactivateRaffleProcess(id_raffle) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`UPDATE rifas SET status = 'no_activa' WHERE id = ?`, [id_raffle]);
+
+            const [[rifas]] = await db.execute('SELECT * FROM rifas WHERE id = ?', [id_raffle])
+
+            return rifas
+
+        } catch (error) {
+            console.error('Error con el proceso de desactivación', error);
+            throw error;
+        }
+    }
+
     static async getRaffleById(id) {
         try {
             const db = await poolPromise; // Esperamos la conexión
@@ -179,6 +194,8 @@ class RaffleModel {
         try {
             const db = await poolPromise; // Esperamos la conexión
 
+            await db.execute(`DELETE FROM ganadores;`);
+            ganador.fecha = new Date();
             const [{ insertId }] = await db.execute(`INSERT INTO ganadores
                 (nombre, telefono, tike_ganador, nombre_rifa, fecha) VALUES
                 (?, ?, ?, ?, ?);`,
@@ -225,14 +242,15 @@ class RaffleModel {
             throw error;
         }
     }
+
     /**
- * Lista los tickets por correo
- *
- * @static
- * @param {*} search
- * @return {*} 
- * @memberof RaffleModel
- */
+     *Lista los tickets por correo
+     *
+     * @static
+     * @param {*} search
+     * @return {*} 
+     * @memberof RaffleModel
+     */
     static async getTicketsByEmail(search) {
         try {
             const db = await poolPromise; // Esperamos la conexión
@@ -256,6 +274,34 @@ class RaffleModel {
             throw error;
         }
     }
+
+    static async gerUserWin() {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            let [[ganadores]] = await db.execute(`Select * FROM ganadores`);
+
+            return ganadores || {};
+        } catch (error) {
+            console.error('Error con el proceso de buscar tickets', error);
+            throw error;
+        }
+    }
+
+    static async deleteWin() {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`DELETE FROM ganadores;`);
+
+            return [];
+        } catch (error) {
+            console.error('Error de eliminar ganadores', error);
+            throw error;
+        }
+    }
+
+
 
 }
 

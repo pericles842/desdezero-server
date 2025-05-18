@@ -8,6 +8,7 @@ moment.locale('es');
 const PayModel = require('../models/PayModel');
 const TikeModel = require('../models/TikeModel');
 const RaffleModel = require('../models/RaffleModel');
+const UserModel = require('../models/UserModel');
 const logError = require('../utils/LogsCapture');
 const EmailController = require('../controllers/EmailController');
 
@@ -212,9 +213,9 @@ const PayController = {
 
             //filtramos por el pago en cuestion
             sale = sale.find(sale => sale.id === parseInt(id, 10));
-            
+
             let tikes_generados_correo = sale.tikes != null ? sale.tikes.split(',').map((tike) => tike.trim()) : []
-            
+
             //obejeto del correo
             let correo = {
                 nombre: sales.nombre,
@@ -227,11 +228,7 @@ const PayController = {
                 nombre_rifa: rifa_activa.nombre
             }
 
-            let email;
-            try {
-                email = await EmailController.sendEmail(correo);
-            } catch (error) { email = error }
-
+            let email = await EmailController.sendEmail(correo);
 
             res.send({ sale, email })
         } catch (error) {
@@ -252,10 +249,23 @@ const PayController = {
             await PayModel.rejectSale(id);
 
             let sale = await PayModel.getSales();
-
             sale = sale.find(sale => sale.id === parseInt(id, 10));
+            let rifa_activa = await RaffleModel.getRaffleActive()
 
-            res.send({ sale });
+            let config = await UserModel.getConfig()
+
+            let correo = {
+                nombre: sale.usuario,
+                telefono: sale.telefono,
+                correo: sale.correo,
+                total: sale.total,
+                fecha: moment(sale.fecha).format('D [de] MMMM [de] YYYY'),
+                nombre_rifa: rifa_activa.nombre,
+                correo_soporte: config.config.correo
+            }
+
+            let email = await EmailController.rejectEmail(correo);
+            res.send({ sale, email });
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)

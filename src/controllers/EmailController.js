@@ -4,57 +4,117 @@ require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const { text } = require('stream/consumers');
 
 const EmailController = {
 
   sendEmail: async (user) => {
     try {
       const templatePath = path.join(__dirname, '../views', 'correo.ejs');
-      
+
       const html = await ejs.renderFile(templatePath, user);
 
 
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: process.env.HOST_EMAIL,  // El hostname que diste
+        port: process.env.PORT_EMAIL,                  // Puedes usar 587 o 465 (465 es para SSL)
+        secure: false,              // true si usas el puerto 465, false para 587
         auth: {
-          user: process.env.EMAIL,
-          pass: process.env.KEY_EMAIL
+          user: process.env.USER_SMTP,            // Username SMTP
+          pass: process.env.PASSWORD_EMAIL,   // Password SMTP (secret)
         }
       });
-
       const mailOptions = {
-        from: process.env.EMAIL,
+        from: '"Soporte DesdeZero ' + process.env.EMAIL,
         to: user.correo,
         subject: 'Confirmación de compra',
-        html: html,
-        attachments: [
-          {
-            filename: 'logo-negativo.png',
-            path: path.join(__dirname, '../public/img/logo-negativo.png'),
-            cid: 'logo', // Este ID debe coincidir con el src="cid:logo_unasola"
-          },
-          {
-            filename: 'verificado.png',
-            path: path.join(__dirname, '../public/img/verificacion.png'),
-            cid: 'verificado',
-          }
-        ],
+        html: html
       };
 
-      return new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(info.response);
-          }
-        });
-      });
+      let response = await transporter.sendMail(mailOptions);
+      if (response.error) {
+        return response.message;
+      }
+      return response
 
     } catch (error) {
+      logError(error);
+      return {
+        error: true,
+        message: error.message || 'Error al enviar correo',
+      };
+    }
+  },
+  rejectEmail: async (user) => {
+    try {
+      const templatePath = path.join(__dirname, '../views', 'rechazarPago.ejs');
 
-      logError(error)
-      return error
+      const html = await ejs.renderFile(templatePath, user);
+
+
+      const transporter = nodemailer.createTransport({
+        host: process.env.HOST_EMAIL,  // El hostname que diste
+        port: process.env.PORT_EMAIL,                  // Puedes usar 587 o 465 (465 es para SSL)
+        secure: false,              // true si usas el puerto 465, false para 587
+        auth: {
+          user: process.env.USER_SMTP,            // Username SMTP
+          pass: process.env.PASSWORD_EMAIL,   // Password SMTP (secret)
+        }
+      });
+      const mailOptions = {
+        from: '"Soporte DesdeZero ' + process.env.EMAIL,
+        to: user.correo,
+        subject: 'Fallo en la compra',
+        html: html
+      };
+
+      let response = await transporter.sendMail(mailOptions);
+      if (response.error) {
+        return response.message;
+      }
+      return response
+
+    } catch (error) {
+      logError(error);
+      return {
+        error: true,
+        message: error.message || 'Error al enviar correo',
+      };
+    }
+  },
+  personalizedMail: async (req, res) => {
+    try {
+
+      let user = req.body
+
+      const transporter = nodemailer.createTransport({
+        host: process.env.HOST_EMAIL,  // El hostname que diste
+        port: process.env.PORT_EMAIL,                  // Puedes usar 587 o 465 (465 es para SSL)
+        secure: false,              // true si usas el puerto 465, false para 587
+        auth: {
+          user: process.env.USER_SMTP,            // Username SMTP
+          pass: process.env.PASSWORD_EMAIL,   // Password SMTP (secret)
+        }
+      });
+      const mailOptions = {
+        from: '"Soporte DesdeZero ' + process.env.EMAIL,
+        to: user.correo,
+        subject: user.subject,
+        text: user.text
+      };
+
+      let response = await transporter.sendMail(mailOptions);
+      if (response.error) {
+        return response.message;
+      }
+
+      res.send(response);
+    } catch (error) {
+      logError(error);
+      return {
+        error: true,
+        message: error.message || 'Error al enviar correo',
+      };
     }
   }
 };
