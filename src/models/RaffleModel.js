@@ -301,8 +301,6 @@ class RaffleModel {
         }
     }
 
-
-
 }
 
 module.exports = RaffleModel;

@@ -86,6 +86,9 @@ const EmailController = {
     try {
 
       let user = req.body
+      const templatePath = path.join(__dirname, '../views', 'correoInformativo.ejs');
+
+      const html = await ejs.renderFile(templatePath, user);
 
       const transporter = nodemailer.createTransport({
         host: process.env.HOST_EMAIL,  // El hostname que diste
@@ -100,7 +103,7 @@ const EmailController = {
         from: '"Soporte DesdeZero ' + process.env.EMAIL,
         to: user.correo,
         subject: user.subject,
-        text: user.text
+        html: html
       };
 
       let response = await transporter.sendMail(mailOptions);

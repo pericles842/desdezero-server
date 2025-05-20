@@ -53,8 +53,18 @@ app.get('/rechazar', (req, res) => {
 
     res.render('rechazarPago', data);
 });
+app.get('/informativo', (req, res) => {
+   const data = {
+        subject:'Titulo de correo',
+        text:"Contenido del correo a enviar al usuario de la rifa activa "  
+    };
+
+
+    res.render('correoInformativo', data);
+});
 
 const routes = require('./src/routes/routes');
+const { text } = require('stream/consumers');
 // Importa rutas
 for (const routePath in routes) {
     app.use(routePath, routes[routePath]);

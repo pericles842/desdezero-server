@@ -1,4 +1,5 @@
 const RaffleModel = require('../models/RaffleModel');
+const PayModel = require('../models/PayModel');
 const { validationResult } = require('express-validator');
 const { saveImageToFolder, deleteImageFromFolder } = require('../utils/Upload');
 const logError = require('../utils/LogsCapture');
@@ -115,6 +116,13 @@ const RaffleController = {
             const { id } = req.params
             const rifa = await RaffleModel.getRaffleById(id)
             await deleteImageFromFolder(rifa.url_img)
+            //obtener todos los pagos de la rifa activa
+            let pagos_de_rifa = await PayModel.getSales()
+            //iteramos y eliminamos las fotos
+            for (let index = 0; index < pagos_de_rifa.length; index++) {
+                let pago = pagos_de_rifa[index]
+                await deleteImageFromFolder(pago.comprobante)
+            }
             await RaffleModel.deleteRaffle(id)
             res.send(rifa);
         } catch (error) {

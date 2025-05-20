@@ -153,13 +153,28 @@ class UserModel {
 
             const [[statsRow]] = await db.execute(`
               SELECT 
-	(SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
-	(SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
-	(SELECT COUNT(ganadores.id) FROM ganadores) AS premios,
-	(SELECT COUNT(rifas.id) FROM rifas WHERE rifas.status = 'activa') AS rifas_activas,
-    (SELECT COUNT(tickets.id) FROM tickets 
-    inner join rifas on tickets.id_rifa WHERE rifas.status = 'activa') AS tikes_vendidos_rifa
-            `);
+    (SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
+    (SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
+    (SELECT COUNT(rifas.id) FROM rifas WHERE rifas.status = 'activa') AS rifas_activas,
+    (SELECT COUNT(tickets.id) 
+     FROM tickets 
+     INNER JOIN rifas ON tickets.id_rifa = rifas.id 
+     WHERE rifas.status = 'activa') AS tikes_vendidos_rifa,
+    (
+        SELECT 
+            CONCAT(
+                ROUND(
+                    (SELECT COUNT(tickets.id) 
+                     FROM tickets 
+                     INNER JOIN rifas r2 ON tickets.id_rifa = r2.id 
+                     WHERE r2.status = 'activa') * 100.0 / rifas.objetivo_ventas
+                , 2), '%'
+            )
+        FROM rifas 
+        WHERE rifas.status = 'activa'
+        LIMIT 1
+    ) AS porcentaje_venta
+`);
 
             const resultado = {
                 config: configRows ? configRows : [],

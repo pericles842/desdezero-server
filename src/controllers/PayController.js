@@ -247,10 +247,10 @@ const PayController = {
             const { id } = req.params;
 
             await PayModel.rejectSale(id);
-
             let sale = await PayModel.getSales();
             sale = sale.find(sale => sale.id === parseInt(id, 10));
             let rifa_activa = await RaffleModel.getRaffleActive()
+            await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
 
             let config = await UserModel.getConfig()
 
