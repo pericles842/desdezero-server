@@ -5,6 +5,7 @@ const ejs = require('ejs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const { text } = require('stream/consumers');
+const PayModel = require('../models/PayModel');
 
 const EmailController = {
 
@@ -110,6 +111,8 @@ const EmailController = {
       if (response.error) {
         return response.message;
       }
+
+      await PayModel.rejectSale(user.id_payment)
 
       res.send(response);
     } catch (error) {
