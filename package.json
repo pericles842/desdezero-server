@@ -24,8 +24,6 @@
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.3",
     "puppeteer": "^24.9.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
