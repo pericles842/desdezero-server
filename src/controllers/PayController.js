@@ -1,9 +1,11 @@
 const { saveImageToFolder, deleteImageFromFolder } = require('../utils/Upload');
 const { validationResult } = require('express-validator');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const moment = require('moment');
 require('moment/locale/es');
 moment.locale('es');
+puppeteer.use(StealthPlugin());
 
 const PayModel = require('../models/PayModel');
 const TikeModel = require('../models/TikeModel');
@@ -80,24 +82,29 @@ const PayController = {
         let browser;
         try {
             browser = await puppeteer.launch({
-                headless: 'new',
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
+                headless: true,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-blink-features=AutomationControlled'
+                ]
             });
 
             const page = await browser.newPage();
 
-            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-            await page.setViewport({ width: 1280, height: 800 });
+            await page.setUserAgent(
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            );
+            await page.setViewport({ width: 1280, height: 720 });
 
-            // Trucos anti-bot
-            await page.evaluateOnNewDocument(() => {
-                Object.defineProperty(navigator, 'webdriver', { get: () => false });
-            });
-
+            // Navega y espera solo lo necesario
             await page.goto('https://monitordolarvenezuela.com/', {
-                waitUntil: 'networkidle2',
+                waitUntil: 'domcontentloaded',
                 timeout: 20000
             });
+
+            // Espera hasta que se vea al menos un contenedor de tasa
+            await page.waitForSelector('.grid.grid-cols-6.gap-2.my-2', { timeout: 10000 });
 
             const datos = await page.$$eval(
                 '.grid.grid-cols-6.gap-2.my-2 > div:not(:first-child) > div.border-2.rounded-lg.shadow.p-2.text-center.relative.mt-3.lg\\:mt-0',
@@ -112,18 +119,14 @@ const PayController = {
 
             res.send(datos);
         } catch (err) {
-            logError(err);
-            return res.status(500).json({ error: error });
+            console.error('❌ Error al obtener datos del dólar:', err.message);
+            logError(err)
+            res.status(500).send(err);
         } finally {
             if (browser) {
-                try {
-                    await browser.close();
-                } catch (closeErr) {
-                    console.error('⚠️ Error al cerrar el navegador:', closeErr.message);
-                }
+                await browser.close();
             }
         }
-
     },
     createUserPayment: async (req, res) => {
 
