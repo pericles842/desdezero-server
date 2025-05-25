@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.DOUBLE,
         allowNull: false
       },
+      tasa_automatica: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true
+      },
       telefono: {
         type: Sequelize.STRING(20),
         allowNull: false

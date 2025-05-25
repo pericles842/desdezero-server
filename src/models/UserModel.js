@@ -96,9 +96,9 @@ class UserModel {
             config.createdAt = new Date()
 
             const [{ insertId }] = await db.execute(
-                `INSERT INTO config (tasa_banco, tasa_personalizada, telefono, correo, estadisticas, createdAt)
-                 VALUES (?, ?, ?, ?, ?, ?)`,
-                [config.tasa_banco, config.tasa_personalizada,
+                `INSERT INTO config (tasa_banco, tasa_personalizada, tasa_automatica,  telefono, correo, estadisticas, createdAt)
+                 VALUES (?, ?, ?, ?, ?, ?,?)`,
+                [config.tasa_banco, config.tasa_personalizada, config.tasa_automatica,
                 config.telefono, config.correo, config.estadisticas, config.createdAt]
             );
             config.id = insertId
@@ -121,6 +121,7 @@ class UserModel {
                 `UPDATE config
              SET tasa_banco = ?, 
                  tasa_personalizada = ?, 
+                 tasa_automatica = ?,
                  telefono = ?, 
                  correo = ?, 
                  estadisticas = ?, 
@@ -129,6 +130,7 @@ class UserModel {
                 [
                     config.tasa_banco,
                     config.tasa_personalizada,
+                    config.tasa_automatica,
                     config.telefono,
                     config.correo,
                     config.estadisticas,
@@ -197,7 +199,20 @@ class UserModel {
     rifas.participantes,
     CONCAT(rifas.fondos_recaudados, '$') AS fondos_recaudados,
     COUNT(tickets.id) AS tickets,
-
+     (
+        SELECT 
+            CONCAT(
+                ROUND(
+                    (SELECT COUNT(tickets.id) 
+                     FROM tickets 
+                     INNER JOIN rifas r2 ON tickets.id_rifa = r2.id 
+                     WHERE r2.status = 'activa') * 100.0 / rifas.objetivo_ventas
+                , 2), '%'
+            )
+        FROM rifas 
+        WHERE rifas.status = 'activa'
+        LIMIT 1
+    ) AS porcentaje_venta,
     -- Método de pago más usado
     (
         SELECT 
@@ -254,6 +269,12 @@ GROUP BY rifas.id;
                 },
                 {
                     col: 'md:col-6',
+                    icon: 'fa-solid fa-percent',
+                    title: 'Porcentaje de rifa',
+                    statistic: configRows?.porcentaje_venta ? configRows.porcentaje_venta : 0
+                },
+                {
+                    col: 'md:col-6',
                     icon: 'fa-solid fa-building-columns',
                     title: 'Pago Mas Usado',
                     statistic: configRows?.metodo_pago_mas_usado ? configRows.metodo_pago_mas_usado : 0
@@ -276,7 +297,7 @@ GROUP BY rifas.id;
             return statics
         } catch (error) {
             if (error instanceof Error) {
-                console.error(error.message);
+                console.error(error);
             }
             throw error;
         }
