@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('config', [
       {
         tasa_banco: 'paralelo', // Ejemplo de tasa bancaria
-        tasa_personalizada: 135.00, // Tasa personalizada de ejemplo
+        tasa_personalizada: 142.42, // Tasa personalizada de ejemplo
         tasa_automatica: 1, // Valor de ejemplo para la tasa automática
         telefono: '4129844334', // Número de teléfono de ejemplo
         correo: 'soporte@desdezerolg.com', // Correo de ejemplo

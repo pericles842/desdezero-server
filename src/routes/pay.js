@@ -16,7 +16,7 @@ router.delete('/delete/:id', AuthTokenHeader, PayController.deletePayMethod);
 
 //!LOS PRIMEROS NO SERAN APIS
 // router.get('/get-rates', RatesController.getDollarRates);
-// router.get('/get-rates-pydolarve', RatesController.GetRatesPydolarVe);
+router.get('/update-rate-process', RatesController.updateRatesProcess);
 router.get('/get-rates-desdezero', RatesController.listRatesDesdezero);
 
 router.post('/create-pay', upload.single('image'), PayController.createUserPayment);

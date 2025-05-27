@@ -1,4 +1,3 @@
-const axios = require('axios');
 const puppeteer = require('puppeteer');
 
 
@@ -90,13 +89,12 @@ const RatesController = {
                 }
             }
         }
-    }, GetRatesPydolarVe: async (req, res) => {
+    },
+    updateRatesProcess: async (req, res) => {
         try {
-            const response = await axios.get('https://pydolarve.org/api/v2/dollar');
 
-            const { datetime, monitors } = response.data
-
-            res.send(monitors)
+            await RatesModel.updateRatesProcess()
+            res.send([])
 
         } catch (error) {
             logError(error)

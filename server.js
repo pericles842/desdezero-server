@@ -75,5 +75,5 @@ for (const routePath in routes) {
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT || 3000, () => {
     console.log(`🟢 Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`🟢 Local`);
+    console.log(`🟢 ${process.env.NODE_ENV}`);
 });
