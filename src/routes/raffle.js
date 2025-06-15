@@ -24,6 +24,11 @@ router.get('/tickets/:search', RaffleController.getTicketsByEmail); // Listar ti
 router.post('/winner/create', AuthTokenHeader, RaffleController.createWinner); // Crea o actualiza un ganador
 router.get('/winner', RaffleController.getUserWin);
 
-router.delete('/winner/delete',AuthTokenHeader, RaffleController.deleteWin);
+router.delete('/winner/delete', AuthTokenHeader, RaffleController.deleteWin);
+
+//PREMIOS
+router.post('/premios', AuthTokenHeader, upload.single('image'), RaffleController.createAward);
+router.delete('/premios/:id', AuthTokenHeader, RaffleController.deleteAward);
+router.get('/premios', RaffleController.listAwards);
 
 module.exports = router;

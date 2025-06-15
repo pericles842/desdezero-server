@@ -7,7 +7,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const UPLOADS_BASE = path.join(__dirname, 'uploads');
 
 // ✅ Carpetas permitidas
-const allowedFolders = ['img_rifas', 'img_pagos', 'media','img_pay'];
+const allowedFolders = ['img_rifas', 'img_pagos', 'media','img_pay','img_awards'];
 
 /**
  * Guarda una imagen en una carpeta específica del servidor.
@@ -51,6 +51,7 @@ async function saveImageToFolder(file, folder) {
  * @param {string} relativePath
  */
 async function deleteImageFromFolder(relativePath) {
+
   const cleanRel = relativePath.replace(/^[/\\]+/, '');
 
   const fullPath = path.join(__dirname, relativePath);

@@ -172,6 +172,63 @@ const RaffleController = {
         }
     },
 
+    createAward: async (req, res) => {
+        try {
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errores: errors.array() });
+            }
+
+            let premio = JSON.parse(req.body.premio);
+            if (req.file) {
+
+                //!si la imagen se repite no agregar otra
+                if (premio.url.trim()) await deleteImageFromFolder(premio.url)
+                //si la imagen existe guardamos el archivo
+                const result = await saveImageToFolder(req.file, 'img_awards');
+                premio.url = result.relativePath
+
+            }
+
+            premio = premio.id == 0 ?
+                await RaffleModel.createAward(premio) :
+                await RaffleModel.updateAward(premio)
+
+
+            res.send(premio);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
+    },
+    listAwards: async (req, res) => {
+        try {
+            let premios = await RaffleModel.listAwards()
+            res.send(premios);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
+    },
+    deleteAward: async (req, res) => {
+        try {
+            const { id } = req.params
+            const premios = await RaffleModel.listAwards()
+
+            //borramos la imagen
+            let premio = premios.find(premio => premio.id == id)
+            await deleteImageFromFolder(premio.url)
+
+            await RaffleModel.deleteAward(id)
+            res.send(premio);
+        } catch (error) {
+            logError(error)
+            res.status(500).send(error.message);
+        }
+    },
+
+
 };
 
 module.exports = RaffleController;

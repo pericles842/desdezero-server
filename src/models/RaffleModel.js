@@ -1,4 +1,5 @@
 const { poolPromise } = require('../config/db');
+const { deleteImageFromFolder } = require('../utils/Upload');
 
 class RaffleModel {
 
@@ -297,6 +298,69 @@ class RaffleModel {
             return [];
         } catch (error) {
             console.error('Error de eliminar ganadores', error);
+            throw error;
+        }
+    }
+    static async createAward(premio) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            premio.fecha = new Date();
+            const [{ insertId }] = await db.execute(`INSERT INTO premios (nombre_rifa, nombre_ganador,tike_ganador,url,fecha)
+             VALUES (?,?,?,?,?)`, [premio.nombre_rifa, premio.nombre_ganador, premio.tike_ganador, premio.url, premio.fecha]);
+            premio.id = insertId;
+
+            return premio;
+        } catch (error) {
+            console.error('Error de eliminar ganadores', error);
+            throw error;
+        }
+    }
+    static async updateAward(premio) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            await db.execute(`UPDATE premios SET
+                nombre_rifa = ?,
+                nombre_ganador = ?,
+                tike_ganador = ?,
+                url = ?,
+                fecha = ?
+            WHERE
+                id = ?;`,
+                [premio.nombre_rifa, premio.nombre_ganador, premio.tike_ganador, premio.url, premio.fecha, premio.id]
+            );
+
+            return premio;
+
+        } catch (error) {
+            console.error('Error al actualizar el premio', error);
+            throw error;
+        }
+    }
+
+    static async deleteAward(id) {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+            await db.execute(`DELETE FROM premios WHERE id = ?;`, [id]);
+
+            return true;
+        } catch (error) {
+            console.error('Error al eliminar premios', error);
+            throw error;
+        }
+    }
+
+    static async listAwards() {
+        try {
+            const db = await poolPromise; // Esperamos la conexión
+
+            const [premios] = await db.execute(`SELECT * FROM premios;`);
+
+            return premios;
+
+        } catch (error) {
+            console.error('Error al obtener premios', error);
             throw error;
         }
     }
