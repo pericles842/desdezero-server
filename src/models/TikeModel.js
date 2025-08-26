@@ -62,7 +62,7 @@ class TikeModel {
             const [[stats]] = await db.execute(`SELECT 
                             pagos.cantidad_tickets AS tikes_comprados,
                             COUNT(tickets.id) AS tikes_generados
-                            FROM railway.pagos
+                            FROM pagos
                             left JOIN tickets ON tickets.id_pago = pagos.id
                             WHERE pagos.id = ?
                             GROUP BY pagos.cantidad_tickets;`, [sales.id]);

@@ -175,7 +175,7 @@ class PayModel {
                 WHERE status = 'activa'
             )
             GROUP BY pagos.id
-            ORDER BY pagos.fecha;`);
+            ORDER BY pagos.fecha DESC;`);
 
             return rows;
 

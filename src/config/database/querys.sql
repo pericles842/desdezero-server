@@ -1,5 +1,5 @@
 --buscar los tikes de un usuario
-SELECT * FROM railway.tickets
+SELECT * FROM tickets
 INNER JOIN pagos on pagos.id = tickets.id_pago
 where pagos.id = 1 ;
 
@@ -17,7 +17,7 @@ SELECT codigo, COUNT(*) as repeticiones FROM tickets GROUP BY codigo HAVING COUN
 SELECT 
   pagos.cantidad_tickets AS tikes_comprados,
   COUNT(tickets.id) AS tikes_generados
-FROM railway.pagos
+FROM pagos
 left JOIN tickets ON tickets.id_pago = pagos.id
 WHERE pagos.id = 32
 GROUP BY pagos.cantidad_tickets;
