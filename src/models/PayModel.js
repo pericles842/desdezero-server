@@ -144,11 +144,12 @@ class PayModel {
             throw error.message;
         }
     }
-    static async getSales() {
+    static async getSales(id = null) {
         try {
             const db = await poolPromise; // Esperamos la conexión
-            const [rows] = await db.execute(
-                `SELECT 
+
+            let query = `
+            SELECT 
                 pagos.id,
                 pagos.nombre AS usuario,
                 pagos.referencia,
@@ -164,28 +165,41 @@ class PayModel {
                 metodos_pago.tipo,
                 pagos.fecha,
                 rifas.nombre AS rifa,
-            GROUP_CONCAT(tickets.codigo ORDER BY tickets.codigo SEPARATOR ',') AS tikes
+                GROUP_CONCAT(tickets.codigo ORDER BY tickets.codigo SEPARATOR ',') AS tikes
             FROM pagos
             INNER JOIN rifas ON rifas.id = pagos.id_rifa
             INNER JOIN metodos_pago ON metodos_pago.id = pagos.id_metodo_pago
             LEFT JOIN tickets ON tickets.id_pago = pagos.id
-            WHERE rifas.id = (
+        `;
+
+            // Condición dinámica segun el id,
+            //  obtenemos pago o todos los pagos de la rifa activa
+            if (id !== null) {
+                query += ` WHERE pagos.id = ? `;
+            } else {
+                query += ` WHERE rifas.id = (
                 SELECT MAX(id)
                 FROM rifas
                 WHERE status = 'activa'
-            )
+            ) `;
+            }
+
+            query += `
             GROUP BY pagos.id
-            ORDER BY pagos.fecha DESC;`);
+            ORDER BY pagos.fecha DESC;`;
+
+            const [rows] = await db.execute(query, id !== null ? [id] : []);
 
             return rows;
 
         } catch (error) {
             if (error instanceof Error) {
-                error.message;
+                console.error("Error en getSales:", error.message);
             }
             throw error.message;
         }
     }
+
 
     static async approveSale(id_payment) {
         try {

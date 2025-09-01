@@ -160,12 +160,9 @@ const PayController = {
             await TikeModel.saveTikes(tikes, rifa_activa.id, sales)
             await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
 
-            //obtenemos las ventas con los tikes 
-            let sale = await PayModel.getSales()
-
-            //filtramos por el pago en cuestion
-            sale = sale.find(sale => sale.id === parseInt(id, 10));
-
+            //obtenemos la venta con los tikes 
+            let [sale] = await PayModel.getSales(id)
+            
             let tikes_generados_correo = sale.tikes != null ? sale.tikes.split(',').map((tike) => tike.trim()) : []
 
             //obejeto del correo
@@ -199,8 +196,8 @@ const PayController = {
             const { id } = req.params;
 
             await PayModel.rejectSale(id);
-            let sale = await PayModel.getSales();
-            sale = sale.find(sale => sale.id === parseInt(id, 10));
+            let [sale] = await PayModel.getSales(id);
+           
             let rifa_activa = await RaffleModel.getRaffleActive()
             await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
 
