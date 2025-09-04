@@ -15,7 +15,10 @@ moment.tz.setDefault('America/Caracas');
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.ORIGIN_WEBSOCKET, //app Angular
+        origin: [
+            'http://localhost:4200',
+            'https://www.desdezerolg.com'
+        ],
         methods: ["GET", "POST", "PUT", "DELETE"]
     }
 });
