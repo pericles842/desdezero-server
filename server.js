@@ -5,10 +5,13 @@ require('dotenv').config();
 const cors = require('cors');
 const path = require('path');
 const app = express();
+const moment = require('moment-timezone');
 
 const http = require('http');
 const server = http.createServer(app);
 
+//zona horaria
+moment.tz.setDefault('America/Caracas');
 
 const io = new Server(server, {
     cors: {
