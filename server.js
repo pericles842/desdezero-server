@@ -1,8 +1,27 @@
 const express = require('express');
+const { Server } = require('socket.io');
+
 require('dotenv').config();
 const cors = require('cors');
 const path = require('path');
 const app = express();
+
+const http = require('http');
+const server = http.createServer(app);
+
+
+const io = new Server(server, {
+    cors: {
+        origin: process.env.ORIGIN_WEBSOCKET, //app Angular
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    }
+});
+
+// Middleware para compartir el io con las rutas
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 // Configuración de CORS para permitir peticiones desde otros orígenes
 app.use(cors({
@@ -54,9 +73,9 @@ app.get('/rechazar', (req, res) => {
     res.render('rechazarPago', data);
 });
 app.get('/informativo', (req, res) => {
-   const data = {
-        subject:'Titulo de correo',
-        text:"Contenido del correo a enviar al usuario de la rifa activa "  
+    const data = {
+        subject: 'Titulo de correo',
+        text: "Contenido del correo a enviar al usuario de la rifa activa "
     };
 
 
@@ -64,16 +83,24 @@ app.get('/informativo', (req, res) => {
 });
 
 const routes = require('./src/routes/routes');
-const { text } = require('stream/consumers');
+
 // Importa rutas
 for (const routePath in routes) {
     app.use(routePath, routes[routePath]);
 }
 
+// Escuchar conexiones de sockets
+io.on('connection', (socket) => {
+    console.log('🟢 Cliente conectado:', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('🟢 Cliente desconectado:', socket.id);
+    });
+});
 
 //servidor
 const PORT = process.env.SERVER_PORT || 3000;
-app.listen(PORT || 3000, () => {
+server.listen(PORT || 3000, () => {
     console.log(`🟢 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`🟢 ${process.env.NODE_ENV}`);
 });

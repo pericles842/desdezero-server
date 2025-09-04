@@ -25,7 +25,8 @@
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.3",
     "puppeteer": "^24.9.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

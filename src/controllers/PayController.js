@@ -162,7 +162,7 @@ const PayController = {
 
             //obtenemos la venta con los tikes 
             let [sale] = await PayModel.getSales(id)
-            
+
             let tikes_generados_correo = sale.tikes != null ? sale.tikes.split(',').map((tike) => tike.trim()) : []
 
             //obejeto del correo
@@ -177,14 +177,27 @@ const PayController = {
                 nombre_rifa: rifa_activa.nombre
             }
 
-            let email = await EmailController.sendEmail(correo);
+            //*enviamos la peticion de la venta
+            res.send({ sale })
 
-            res.send({ sale, email })
+            //*Mandamos el correo por background 
+            setImmediate(async () => {
+                let res_email = await EmailController.sendEmail(correo);
+                // 👇 Emitimos la notificación por WebSocket
+                req.io.emit('notificationEmail', {
+                    email: correo.correo,
+                    severity: res_email.error ? 'error' : 'success',
+                    res: res_email
+                });
+
+            });
+
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)
         }
     },
+
     rejectSale: async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -197,7 +210,7 @@ const PayController = {
 
             await PayModel.rejectSale(id);
             let [sale] = await PayModel.getSales(id);
-           
+
             let rifa_activa = await RaffleModel.getRaffleActive()
             await RaffleModel.updateActiveRaffleParticipants(rifa_activa.id)
 
@@ -213,8 +226,19 @@ const PayController = {
                 correo_soporte: config.config.correo
             }
 
-            let email = await EmailController.rejectEmail(correo);
-            res.send({ sale, email });
+            res.send({ sale });
+
+            //*Mandamos el correo por background 
+            setImmediate(async () => {
+                let res_email = await EmailController.rejectEmail(correo);
+                // 👇 Emitimos la notificación por WebSocket
+                req.io.emit('notificationEmail', {
+                    email: correo.correo,
+                    severity: res_email.error ? 'error' : 'success',
+                    res: res_email
+                });
+
+            });
         } catch (error) {
             logError(error.message)
             res.status(500).send(error)
