@@ -14,5 +14,4 @@ router.get('/config', UserController.getConfig);
 router.get('/admin-statistics', AuthTokenHeader, UserController.adminStatistics);
 router.post('/send-email', EmailController.personalizedMail);
 
-
 module.exports = router;
