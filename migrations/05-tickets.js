@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true
       },
       codigo: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(4), //DEPENDIENDO DE LOS DIGITOS
         allowNull: false
       },
       id_rifa: {
