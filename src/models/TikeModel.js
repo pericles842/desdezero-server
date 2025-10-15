@@ -26,9 +26,9 @@ class TikeModel {
         tk.codigo.toString().padStart(4, "0")
       );
 
-      // Generar todos los posibles tickets "0001" → "9999"
-      const todos = Array.from({ length: 9999 }, (_, i) =>
-        (i + 1).toString().padStart(4, "0")
+      // Generar todos los posibles tickets "0000" → "9999"
+      const todos = Array.from({ length: 10000 }, (_, i) =>
+        (i).toString().padStart(4, "0")
       );
 
       // Filtrar los disponibles
