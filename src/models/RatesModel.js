@@ -42,7 +42,7 @@ class RatesModel {
 
       //*Si falla toma las tasas de la base de datos
       let rates_to_update = await axios
-        .get("https://ve.dolarapi.com/v1/dolares")
+        .get("https://api.dolarvzla.com/public/exchange-rate")
         .then((res) => res.data)
         .catch((error) => {
           console.warn("Fallo la petición, usando tasa Manual:", error.message);
@@ -56,34 +56,28 @@ class RatesModel {
         });
 
       //*Validamos si es la respuesta de la api o de la base de datos
-      if (Array.isArray(rates_to_update)) {
+      if (!Array.isArray(rates_to_update)) {
+        
         //*Transformamos la respuesta de la api un en modelo valido para las tablas
-
-        const bcv = rates_to_update[0];
-        const paralelo = rates_to_update[1];
-        const binance = rates_to_update[2];
-
+        const { current } = rates_to_update;
 
         rates_current.map((rate_current) => {
           if (rate_current.key === "bcv") {
-            rate_current.price = bcv.promedio;
+            rate_current.price = current.usd;
             rate_current.price_old = rate_current.price_old;
-            rate_current.last_update = bcv.fechaActualizacion;
+            rate_current.last_update = current.date;
           } else if (rate_current.key === "paralelo") {
-            rate_current.price = paralelo.promedio;
+            rate_current.price = current.eur;
             rate_current.price_old = rate_current.price_old;
-            rate_current.last_update = paralelo.fechaActualizacion;
+            rate_current.last_update = current.date;
           } else {
-            rate_current.price = binance.promedio;
+            rate_current.price = (current.usd + current.eur) / 2;
             rate_current.price_old = rate_current.price_old;
-            rate_current.last_update = binance.fechaActualizacion;
+            rate_current.last_update = current.date;
           }
         });
       }
 
-    //  console.log(rates_current);
-      
-      // console.log(rates_current);
       //*Realizamos la actualización
       for (const rate of rates_current) {
         await this.updateRate(rate);
@@ -91,7 +85,7 @@ class RatesModel {
 
       console.log(
         "Tasas actualizadas",
-        moment().format("D [de] MMMM [de] YYYY")
+        moment().format("D [de] MMMM [de] YYYY"),
       );
     } catch (error) {
       console.error("Error en proceso de actualización", error);
@@ -101,14 +95,13 @@ class RatesModel {
 
   static async updateRate(rate) {
     try {
-        
       const db = await poolPromise; // Esperamos la conexión
       const [result] = await db.execute(
         `UPDATE dollar_rates SET 
                 price = ?,
                 price_old = ?,
                 last_update = ? WHERE id = ?`,
-        [rate.price, rate.price_old, rate.last_update, rate.id]
+        [rate.price, rate.price_old, rate.last_update, rate.id],
       );
       return result;
     } catch (error) {
