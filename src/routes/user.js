@@ -12,6 +12,7 @@ router.post('/auth', UserController.authUserMaster);
 router.post('/create-config', AuthTokenHeader, UserController.saveConfigWeb);
 router.get('/config', UserController.getConfig);
 router.get('/admin-statistics', AuthTokenHeader, UserController.adminStatistics);
+router.get('/public-statistics', UserController.publicStatistics);
 router.post('/send-email', EmailController.personalizedMail);
 
 module.exports = router;

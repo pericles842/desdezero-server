@@ -1,124 +1,140 @@
-const { poolPromise } = require('../config/db');
+const { poolPromise } = require("../config/db");
 
 class UserModel {
+  static async authUserMaster(user) {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
 
-    static async authUserMaster(user) {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
+      // let creado_en = new Date()
+      const [[userDB]] = await db.execute(
+        `SELECT id,nombre,correo,telefono FROM usuarios WHERE correo = ? AND password = ?`,
+        [user.correo, user.password],
+      );
 
-
-            // let creado_en = new Date()
-            const [[userDB]] = await db.execute(`SELECT id,nombre,correo,telefono FROM usuarios WHERE correo = ? AND password = ?`,
-                [user.correo, user.password]);
-
-            if (!userDB) throw new Error('Usuario o contraseña a incorrectos')
-            return userDB;
-
-        } catch (error) {
-            if (error instanceof Error) {
-                error.message
-            }
-            throw error;
-        }
+      if (!userDB) throw new Error("Usuario o contraseña a incorrectos");
+      return userDB;
+    } catch (error) {
+      if (error instanceof Error) {
+        error.message;
+      }
+      throw error;
     }
+  }
 
-    static async saveUser(user) {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
-            user.creado_en = new Date()
-            const [{ insertId }] = await db.execute(
-                `INSERT INTO usuarios (nombre, correo,telefono, password , creado_en)
+  static async saveUser(user) {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
+      user.creado_en = new Date();
+      const [{ insertId }] = await db.execute(
+        `INSERT INTO usuarios (nombre, correo,telefono, password , creado_en)
                  VALUES (?, ?, ?, ?, ?)`,
-                [user.nombre, user.correo, user.telefono, user.password, user.creado_en]);
+        [
+          user.nombre,
+          user.correo,
+          user.telefono,
+          user.password,
+          user.creado_en,
+        ],
+      );
 
-            user.id = insertId;
+      user.id = insertId;
 
-            return user;
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-            throw error;
-        }
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      throw error;
     }
-    static async updateUser(user) {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
-            user.creado_en = new Date();
+  }
+  static async updateUser(user) {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
+      user.creado_en = new Date();
 
-            const [{ affectedRows }] = await db.execute(
-                `UPDATE usuarios
+      const [{ affectedRows }] = await db.execute(
+        `UPDATE usuarios
                  SET nombre = ?,
                 correo = ?,
                 telefono = ?, 
                 password = ?, creado_en = ?
                  WHERE id = ?`,
-                [user.nombre, user.correo, user.telefono, user.password, user.creado_en, user.id]
-            );
+        [
+          user.nombre,
+          user.correo,
+          user.telefono,
+          user.password,
+          user.creado_en,
+          user.id,
+        ],
+      );
 
-            return user;
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-            throw error;
-        }
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      throw error;
     }
+  }
 
+  static async searchUserByPhone(telefono) {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
 
-    static async searchUserByPhone(telefono) {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
+      let [[userDB]] = await db.execute(
+        `SELECT * FROM usuarios  WHERE telefono = ?`,
+        [telefono],
+      );
 
-            let [[userDB]] = await db.execute(
-                `SELECT * FROM usuarios  WHERE telefono = ?`,
-                [telefono]);
+      userDB = !userDB ? [] : userDB;
 
-            userDB = !userDB ? [] : userDB;
-
-
-            return userDB;
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-            throw error;
-        }
+      return userDB;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      throw error;
     }
+  }
 
-    static async saveConfigWeb(config) {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
+  static async saveConfigWeb(config) {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
 
-            config.createdAt = new Date()
+      config.createdAt = new Date();
 
-            const [{ insertId }] = await db.execute(
-                `INSERT INTO config (tasa_banco, tasa_personalizada, tasa_automatica,  telefono, correo, estadisticas, createdAt)
+      const [{ insertId }] = await db.execute(
+        `INSERT INTO config (tasa_banco, tasa_personalizada, tasa_automatica,  telefono, correo, estadisticas, createdAt)
                  VALUES (?, ?, ?, ?, ?, ?,?)`,
-                [config.tasa_banco, config.tasa_personalizada, config.tasa_automatica,
-                config.telefono, config.correo, config.estadisticas, config.createdAt]
-            );
-            config.id = insertId
-            return config
-        } catch (error) {
-            if (error instanceof Error) {
-                error.message
-            }
-            throw error;
-        }
+        [
+          config.tasa_banco,
+          config.tasa_personalizada,
+          config.tasa_automatica,
+          config.telefono,
+          config.correo,
+          config.estadisticas,
+          config.createdAt,
+        ],
+      );
+      config.id = insertId;
+      return config;
+    } catch (error) {
+      if (error instanceof Error) {
+        error.message;
+      }
+      throw error;
     }
+  }
 
-    static async updateConfigWeb(config) {
-        try {
-            const db = await poolPromise;
+  static async updateConfigWeb(config) {
+    try {
+      const db = await poolPromise;
 
-            let createdAt = new Date();
+      let createdAt = new Date();
 
-            const [result] = await db.execute(
-                `UPDATE config
+      const [result] = await db.execute(
+        `UPDATE config
              SET tasa_banco = ?, 
                  tasa_personalizada = ?, 
                  tasa_automatica = ?,
@@ -127,33 +143,33 @@ class UserModel {
                  estadisticas = ?, 
                  createdAt = ?
              WHERE id = ?`,
-                [
-                    config.tasa_banco,
-                    config.tasa_personalizada,
-                    config.tasa_automatica,
-                    config.telefono,
-                    config.correo,
-                    config.estadisticas,
-                    createdAt,
-                    config.id
-                ]
-            );
+        [
+          config.tasa_banco,
+          config.tasa_personalizada,
+          config.tasa_automatica,
+          config.telefono,
+          config.correo,
+          config.estadisticas,
+          createdAt,
+          config.id,
+        ],
+      );
 
-            return config;
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-            throw error;
-        }
+      return config;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      throw error;
     }
-    static async getConfig() {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
+  }
+  static async getConfig() {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
 
-            const [[configRows]] = await db.execute('SELECT * FROM config');
+      const [[configRows]] = await db.execute("SELECT * FROM config");
 
-            const [[statsRow]] = await db.execute(`
+      const [[statsRow]] = await db.execute(`
               SELECT 
     (SELECT COUNT(DISTINCT pagos.correo, pagos.telefono) FROM pagos) AS participantes,
     (SELECT COUNT(tickets.id) FROM tickets) AS tikes_vendidos,
@@ -178,24 +194,24 @@ class UserModel {
     ) AS porcentaje_venta
 `);
 
-            const resultado = {
-                config: configRows ? configRows : [],
-                estadisticas: statsRow ? statsRow : []
-            };
+      const resultado = {
+        config: configRows ? configRows : [],
+        estadisticas: statsRow ? statsRow : [],
+      };
 
-            return resultado
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-            throw error;
-        }
+      return resultado;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      throw error;
     }
-    static async adminStatistics() {
-        try {
-            const db = await poolPromise; // Esperamos la conexión
+  }
+  static async adminStatistics() {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
 
-            const [[configRows]] = await db.execute(`SELECT
+      const [[configRows]] = await db.execute(`SELECT
     rifas.participantes,
     CONCAT(rifas.fondos_recaudados, '$') AS fondos_recaudados,
     COUNT(tickets.id) AS tickets,
@@ -248,62 +264,88 @@ WHERE rifas.status = 'activa'
 GROUP BY rifas.id;
 `);
 
-            let statics = [
-                {
-                    col: 'md:col-4',
-                    icon: 'fa-solid fa-user',
-                    title: 'Participantes',
-                    statistic: configRows?.participantes ? configRows.participantes : 0
-                },
-                {
-                    col: 'md:col-4',
-                    icon: 'fa-solid fa-ticket',
-                    title: 'Fondos Recaudados',
-                    statistic: configRows?.fondos_recaudados ? configRows.fondos_recaudados : 0
-                },
-                {
-                    col: 'md:col-4',
-                    icon: 'fa-solid fa-money-bill-trend-up',
-                    title: 'Tickets Vendidos',
-                    statistic: configRows?.tickets ? configRows.tickets : 0
-                },
-                {
-                    col: 'md:col-6',
-                    icon: 'fa-solid fa-percent',
-                    title: 'Porcentaje de rifa',
-                    statistic: configRows?.porcentaje_venta ? configRows.porcentaje_venta : 0
-                },
-                {
-                    col: 'md:col-6',
-                    icon: 'fa-solid fa-building-columns',
-                    title: 'Pago Mas Usado',
-                    statistic: configRows?.metodo_pago_mas_usado ? configRows.metodo_pago_mas_usado : 0
-                }
-            ]
+      let statics = [
+        {
+          col: "md:col-4",
+          icon: "fa-solid fa-user",
+          title: "Participantes",
+          statistic: configRows?.participantes ? configRows.participantes : 0,
+        },
+        {
+          col: "md:col-4",
+          icon: "fa-solid fa-ticket",
+          title: "Fondos Recaudados",
+          statistic: configRows?.fondos_recaudados
+            ? configRows.fondos_recaudados
+            : 0,
+        },
+        {
+          col: "md:col-4",
+          icon: "fa-solid fa-money-bill-trend-up",
+          title: "Tickets Vendidos",
+          statistic: configRows?.tickets ? configRows.tickets : 0,
+        },
+        {
+          col: "md:col-6",
+          icon: "fa-solid fa-percent",
+          title: "Porcentaje de rifa",
+          statistic: configRows?.porcentaje_venta
+            ? configRows.porcentaje_venta
+            : 0,
+        },
+        {
+          col: "md:col-6",
+          icon: "fa-solid fa-building-columns",
+          title: "Pago Mas Usado",
+          statistic: configRows?.metodo_pago_mas_usado
+            ? configRows.metodo_pago_mas_usado
+            : 0,
+        },
+      ];
 
-            let top_compradores = [];
-            if (configRows?.top_compradores && configRows?.top_compradores.trim()) {
-                top_compradores = configRows?.top_compradores.split(',');
-            }
-            for (let i = 0; i < top_compradores.length; i++) {
-                statics.push({
-                    col: 'md:col-6',
-                    icon: 'fa-solid fa-user',
-                    title: 'Comprador ' + (i + 1),
-                    statistic: top_compradores[i]
-                })
-            }
+      let top_compradores = [];
+      if (configRows?.top_compradores && configRows?.top_compradores.trim()) {
+        top_compradores = configRows?.top_compradores.split(",");
+      }
+      for (let i = 0; i < top_compradores.length; i++) {
+        statics.push({
+          col: "md:col-6",
+          icon: "fa-solid fa-user",
+          title: "Comprador " + (i + 1),
+          statistic: top_compradores[i],
+        });
+      }
 
-            return statics
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error);
-            }
-            throw error;
-        }
+      return statics;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+      }
+      throw error;
     }
+  }
 
-
+  static async publicStatistics() {
+    try {
+      const db = await poolPromise; // Esperamos la conexión
+      const [statsRow] = await db.execute(`SELECT 
+    p.nombre,
+    p.correo,
+    p.telefono,
+    COUNT(t.id) AS total_tickets
+FROM pagos p
+INNER JOIN tickets t ON t.id_pago = p.id
+GROUP BY p.nombre, p.correo, p.telefono
+ORDER BY total_tickets DESC;
+`);
+      return statsRow;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+      }
+      throw error;
+    }
+  }
 }
 
 module.exports = UserModel;
