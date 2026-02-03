@@ -328,16 +328,31 @@ GROUP BY rifas.id;
   static async publicStatistics() {
     try {
       const db = await poolPromise; // Esperamos la conexión
-      const [statsRow] = await db.execute(`SELECT 
-    p.nombre,
-    p.correo,
-    p.telefono,
-    COUNT(t.id) AS total_tickets
-FROM pagos p
-INNER JOIN tickets t ON t.id_pago = p.id
-GROUP BY p.nombre, p.correo, p.telefono
-ORDER BY total_tickets DESC;
-`);
+      const [statsRow] = await db.execute(`
+        SELECT 
+          (
+            SELECT p2.nombre 
+            FROM pagos p2 
+            WHERE p2.telefono = p.telefono AND p2.estatus = 'aprobado' 
+            ORDER BY p2.id DESC 
+            LIMIT 1
+          ) AS nombre,
+          (
+            SELECT p2.correo 
+            FROM pagos p2 
+            WHERE p2.telefono = p.telefono AND p2.estatus = 'aprobado' 
+            ORDER BY p2.id DESC 
+            LIMIT 1
+          ) AS correo,
+          p.telefono,
+          COUNT(t.id) AS total_tickets
+        FROM pagos p
+        INNER JOIN tickets t ON t.id_pago = p.id
+        INNER JOIN rifas r ON t.id_rifa = r.id
+        WHERE p.estatus = 'aprobado' AND r.status = 'activa'
+        GROUP BY p.telefono
+        ORDER BY total_tickets DESC;
+        `);
       return statsRow;
     } catch (error) {
       if (error instanceof Error) {

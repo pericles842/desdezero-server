@@ -42,12 +42,17 @@ class RatesModel {
 
       //*Si falla toma las tasas de la base de datos
       let rates_to_update = await axios
-        .get("https://api.dolarvzla.com/public/exchange-rate")
-        .then((res) => res.data)
-        .catch((error) => {
+        .get("https://api.dolarvzla.com/public/exchange-rate", {
+          headers: {
+            Accept: "application/json",
+            "x-dolarvzla-key": process.env.DOLAR_VNZLA_API_KEY,
+          },
+        })
+        .then(res => res.data)
+        .catch(error => {
           console.warn("Fallo la petición, usando tasa Manual:", error.message);
 
-          return rates_current.map((rate) => ({
+          return rates_current.map(rate => ({
             ...rate,
             price_old: rate.price,
             price: config.tasa_personalizada,
@@ -57,11 +62,10 @@ class RatesModel {
 
       //*Validamos si es la respuesta de la api o de la base de datos
       if (!Array.isArray(rates_to_update)) {
-        
         //*Transformamos la respuesta de la api un en modelo valido para las tablas
         const { current } = rates_to_update;
 
-        rates_current.map((rate_current) => {
+        rates_current.map(rate_current => {
           if (rate_current.key === "bcv") {
             rate_current.price = current.usd;
             rate_current.price_old = rate_current.price_old;
